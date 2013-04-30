@@ -1,5 +1,58 @@
+call pathogen#infect()
 
-""Sort filetype
+set nocompatible
+syntax on
+let $VIMHOME = $HOME."/.vim"
+filetype on
+
+let mapleader=','
+
+""Normal set 
+set cursorline
+set showmode
+set history=1000
+set undolevels=100
+set ruler
+
+" Keep 3 lines after/before the cursor
+set so=3
+
+" active mouse on terminal
+set mouse=a
+
+" Turn off swap files
+set noswapfile
+set nobackup
+set nowb
+
+
+" Move codeblocks
+vnoremap < <gv
+vnoremap > >gv
+
+" Better copy&paste
+set clipboard=unnamed
+
+
+" Colors
+autocmd ColorScheme * hi ColorColumn ctermbg=Black guibg=Black ctermfg=NONE guifg=NONE
+
+set expandtab
+au BufWinEnter * set autoindent|set ts=4|set sw=4
+au BufWinEnter *.html,*.js,*.css,*.scss,*.scala set ts=2|set sw=2
+au BufWinEnter *.scss set filetype=css
+au BufWinEnter *.thrift set filetype=thrift
+
+
+""Number
+set number
+map <silent><F2> :set invnumber<CR>
+
+"Shourcouts
+noremap % v%
+map <Leader>z u<CR>
+map <Leader><Leader> $<CR>
+""Sort lines
 vmap s :sort u<CR>
 
 ""Autocomplete functions
@@ -11,9 +64,34 @@ autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 
+if has("gui_running")
+    colorscheme macvim
+else
+    colorscheme default " hack to force the highlight group to be created
+endif
+
+
+set guitablabel=%M%t
+map <silent><C-m> :tabnext<CR>
+map <silent><C-n> :tabprevious<CR>
+map <silent><C-t> :tabnew<CR>
+
 
 ""TabLeader
 vmap = :Tabularize /=<CR>
 vmap : :Tabularize /:\zs<CR>
+
+
+
+map <silent><C-r> :NERDTreeToggle <CR>
+vmap <silent><C-r> :NERDTreeToggle <CR>
+
+"" Set Home for the current file
+map <C-h> :call CallHome()<CR>
+vmap <C-h> :call CallHome()<CR>
+function! CallHome() 
+    :cd %:p:h
+    :pwd
+endfunction
 
 
