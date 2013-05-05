@@ -3,7 +3,9 @@ call pathogen#infect()
 set nocompatible
 syntax on
 let $VIMHOME = $HOME."/.vim"
+
 filetype on
+filetype plugin on
 
 let mapleader=','
 
@@ -63,6 +65,9 @@ autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
 autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+
+
+let g:SuperTabDefaultCompletionType = "context"
 
 if has("gui_running")
     colorscheme macvim
