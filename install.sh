@@ -37,3 +37,9 @@ cp -Rv zshrc $HOME/.zshrc
 cp -Rv bash_aliases $HOME/.bash_aliases
 
 
+if [ -d ~/.gitconfig ]
+then
+    mv ~/.gitconfig ~/.gitconfig-$DATE
+fi
+mv -v gitconfig ~/.gitconfig 
+
