@@ -1,7 +1,6 @@
 alias s='sudo'
 
-if [ $(uname) ==  "Darwin" ]
-then
+if [ $(uname) =  "Darwin" ]; then
     #Darwing support for commands
     alias ll='ls -la'
     alias ls='ls -G'
@@ -56,7 +55,7 @@ function iroute(){
     s ip route add $1 via $2
 }
 
-#linux
+
 function dpkg-search(){
 	dpkg -l | grep $1
 }

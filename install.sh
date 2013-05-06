@@ -2,6 +2,8 @@
 
 DATE=$(date +%Y%m%d)
 DIR=$(pwd)
+ZSHRC=1
+
 
 #Vims conf
 if [ -d ~/.vim ]
@@ -25,7 +27,10 @@ ln -s  $HOME/.vim/vimrc $HOME/.gvimrc
 
 cd /tmp/ 
 curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
-chsh -s /bin/zsh 
+if [ $ZSHRC == 1 ];then
+    chsh -s /bin/zsh 
+    echo "Installing zsh on the machine"
+fi
 
 cd $DIR
 cp -Rv zshrc $HOME/.zshrc
