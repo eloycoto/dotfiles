@@ -41,5 +41,5 @@ if [ -d ~/.gitconfig ]
 then
     mv ~/.gitconfig ~/.gitconfig-$DATE
 fi
-mv -v gitconfig ~/.gitconfig 
+cp -v gitconfig ~/.gitconfig 
 
