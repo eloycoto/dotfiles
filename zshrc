@@ -3,7 +3,7 @@ if [ -e $HOME/bin ]; then
     export PATH=$PATH:$HOME/bin
 fi
 
-if [ $(uname) == "Darwin" ]; then
+if [ $(uname) = "Darwin" ]; then
     export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/2.7/bin/ 
 fi
 
