@@ -4,6 +4,9 @@ DATE=$(date +%Y%m%d)
 DIR=$(pwd)
 ZSHRC=1
 
+git submodule init
+git submodule update
+
 
 #Vims conf
 if [ -d ~/.vim ]

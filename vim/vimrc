@@ -11,6 +11,7 @@ let mapleader=','
 
 ""Normal set 
 set cursorline
+set cursorcolumn
 set showmode
 set history=1000
 set undolevels=100
@@ -35,6 +36,8 @@ vnoremap > >gv
 " Better copy&paste
 set clipboard=unnamed
 
+"setlocal colorcolumn=81
+highlight ColorColumn guibg=#000000
 
 " Colors
 autocmd ColorScheme * hi ColorColumn ctermbg=Black guibg=Black ctermfg=NONE guifg=NONE
