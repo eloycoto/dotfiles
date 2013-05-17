@@ -11,9 +11,10 @@ fi
 export EDITOR="vim"
 ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="robbyrussell"
-plugins=(git virtualenvwrapper svn python github)
+plugins=(git virtualenvwrapper python github)
+DISABLE_AUTO_UPDATE=true
 source $ZSH/oh-my-zsh.sh
 
-if [ -e $HOME/bash_aliases ];then
-    source $HOME/bash_aliases
+if [ -e $HOME/.bash_aliases ];then
+    source $HOME/.bash_aliases
 fi
