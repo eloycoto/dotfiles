@@ -11,11 +11,13 @@ let mapleader=','
 
 ""Normal set 
 set cursorline
-set cursorcolumn
 set showmode
 set history=1000
 set undolevels=100
 set ruler
+set ic
+
+
 
 " Keep 3 lines after/before the cursor
 set so=3
@@ -73,7 +75,8 @@ autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 let g:SuperTabDefaultCompletionType = "context"
 
 if has("gui_running")
-    colorscheme macvim
+    colorscheme desertEx
+    set cursorcolumn
 else
     colorscheme default " hack to force the highlight group to be created
 endif
