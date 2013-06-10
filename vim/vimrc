@@ -72,6 +72,8 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 
 
+autocmd BufWrite *.py :call Flake8()
+
 let g:SuperTabDefaultCompletionType = "context"
 
 if has("gui_running")
@@ -105,4 +107,9 @@ function! CallHome()
     :pwd
 endfunction
 
-
+func! DeleteTrailingWS()
+    exe "normal mz"
+    %s/\s\+$//ge
+    exe "normal `z"
+endfunc
+autocmd BufWrite *.py :call DeleteTrailingWS()
