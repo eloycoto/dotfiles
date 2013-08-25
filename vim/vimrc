@@ -95,7 +95,7 @@ vmap <leader>: :Tabularize /:\zs<CR>
 
 
 ""Python
-let g:pymode = 1
+""let g:pymode = 1
 let g:pymode_doc = 1
 let g:pymode_doc_key = 'K'
 
