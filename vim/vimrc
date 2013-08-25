@@ -100,6 +100,17 @@ let g:pymode_doc = 1
 let g:pymode_doc_key = 'K'
 
 
+nmap <Leader>c <Plug>CommentaryLine
+xmap <Leader>c <Plug>Commentary
+
+augroup plugin_commentary
+    au!
+    au FileType python setlocal commentstring=#%s
+    au FileType yml setlocal commentstring=#%s
+    au FileType htmldjango setlocal commentstring={#\ %s\ #}
+    au FileType puppet setlocal commentstring=#\ %s
+augroup END
+
 
 map <silent><C-r> :NERDTreeToggle <CR>
 vmap <silent><C-r> :NERDTreeToggle <CR>
