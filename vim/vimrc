@@ -46,9 +46,8 @@ autocmd ColorScheme * hi ColorColumn ctermbg=Black guibg=Black ctermfg=NONE guif
 
 set expandtab
 au BufWinEnter * set autoindent|set ts=4|set sw=4
-au BufWinEnter *.html,*.js,*.css,*.scss,*.scala set ts=2|set sw=2
+au BufWinEnter *.html,*.js,*.css,*.scss,*.scala,*.yml,*.less set ts=2|set sw=2
 au BufWinEnter *.scss set filetype=css
-au BufWinEnter *.thrift set filetype=thrift
 
 
 ""Number
@@ -60,7 +59,7 @@ noremap % v%
 map <Leader>z u<CR>
 map <Leader><Leader> $<CR>
 ""Sort lines
-vmap s :sort u<CR>
+vmap <leader>s :sort u<CR>
 
 ""Autocomplete functions
 autocmd FileType c set omnifunc=ccomplete#Complete
@@ -91,8 +90,14 @@ map <silent><C-t> :tabnew<CR>
 
 
 ""TabLeader
-vmap = :Tabularize /=<CR>
-vmap : :Tabularize /:\zs<CR>
+vmap <leader>= :Tabularize /=<CR>
+vmap <leader>: :Tabularize /:\zs<CR>
+
+
+""Python
+let g:pymode = 1
+let g:pymode_doc = 1
+let g:pymode_doc_key = 'K'
 
 
 
