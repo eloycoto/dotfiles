@@ -111,6 +111,8 @@ augroup plugin_commentary
     au FileType puppet setlocal commentstring=#\ %s
 augroup END
 
+map <C-l> :TagbarOpen fj<CR>
+vmap <C-l> :TagbarOpen fj<CR>
 
 map <silent><C-r> :NERDTreeToggle <CR>
 vmap <silent><C-r> :NERDTreeToggle <CR>
