@@ -41,6 +41,11 @@ set clipboard=unnamed
 "setlocal colorcolumn=81
 highlight ColorColumn guibg=#000000
 
+"Set font with gui 
+if has('gui_running')
+  :set guifont=Source Code Pro Medium:h12
+endif
+
 " Colors
 autocmd ColorScheme * hi ColorColumn ctermbg=Black guibg=Black ctermfg=NONE guifg=NONE
 
@@ -54,7 +59,7 @@ au BufWinEnter *.scss set filetype=css
 set number
 map <silent><F2> :set invnumber<CR>
 
-"Shourcouts
+"Shortcuts
 noremap % v%
 map <Leader>z u<CR>
 map <Leader><Leader> $<CR>
@@ -85,9 +90,10 @@ endif
 
 set guitablabel=%M%t
 map <silent><C-m> :tabnext<CR>
+map <silent><C-k> :tabnext<CR>
 map <silent><C-n> :tabprevious<CR>
+map <silent><C-j> :tabprevious<CR>
 map <silent><C-t> :tabnew<CR>
-
 
 ""TabLeader
 vmap <leader>= :Tabularize /=<CR>
@@ -98,9 +104,8 @@ vmap <leader>: :Tabularize /:\zs<CR>
 ""let g:pymode = 1
 let g:pymode_doc = 1
 let g:pymode_doc_key = 'K'
+let g:pymode_folding = 0
 
-
-nmap <Leader>c <Plug>CommentaryLine
 xmap <Leader>c <Plug>Commentary
 
 augroup plugin_commentary
@@ -111,19 +116,28 @@ augroup plugin_commentary
     au FileType puppet setlocal commentstring=#\ %s
 augroup END
 
-map <C-l> :TagbarOpen fj<CR>
-vmap <C-l> :TagbarOpen fj<CR>
+map <C-a> :TagbarToggle<CR>
+vmap <C-a> :TagbarToggle<CR>
 
 map <silent><C-r> :NERDTreeToggle <CR>
 vmap <silent><C-r> :NERDTreeToggle <CR>
 
 "" Set Home for the current file
-map <C-h> :call CallHome()<CR>
+map <C-ha :call CallHome()<CR>
 vmap <C-h> :call CallHome()<CR>
 function! CallHome() 
     :cd %:p:h
     :pwd
 endfunction
+
+func! Develop()
+    call tagbar#OpenWindow()
+    call NERDTreeCWD()
+endfunc
+command! -nargs=0 Develop call Develop()
+" Add a full develop mode
+map <C-x> :Develop<CR>
+vmap <C-x> :Develop<CR>
 
 func! DeleteTrailingWS()
     exe "normal mz"
