@@ -1,4 +1,4 @@
 --langdef=ser
 --langmap=ser:.cfg
---regex-ser=/[.+]?(\$avp\(.+\))/\1/a,avp/
+--regex-ser=/[.+]?(\$avp\([a-z|A-z|:|-]*\))/\1/a,avp/
 --regex-ser=/[.+]?route\[(.*)\]/\1/r,routes/
