@@ -16,7 +16,8 @@ set history=1000
 set undolevels=100
 set ruler
 set ic
-
+set splitbelow
+set splitright
 
 
 " Keep 3 lines after/before the cursor
@@ -41,10 +42,6 @@ set clipboard=unnamed
 "setlocal colorcolumn=81
 highlight ColorColumn guibg=#000000
 
-"Set font with gui 
-if has('gui_running')
-  :set guifont=Source Code Pro Medium:h12
-endif
 
 " Colors
 autocmd ColorScheme * hi ColorColumn ctermbg=Black guibg=Black ctermfg=NONE guifg=NONE
@@ -145,3 +142,13 @@ func! DeleteTrailingWS()
     exe "normal `z"
 endfunc
 autocmd BufWrite *.py :call DeleteTrailingWS()
+
+
+""Ser/Kamailio or Opensips
+let g:tagbar_type_ser = {
+    \ 'ctagstype' : 'ser',
+    \ 'kinds' : [
+        \ 'a:Avp',
+        \ 'r:routes',
+    \ ]
+\ }

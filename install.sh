@@ -19,6 +19,13 @@ then
     mv ~/.vimrc ~/.vimrc-$DATE
 fi
 
+if [ -f ~/.ctags ]
+then
+    mv ~/.ctags ~/.ctags-$DATE
+fi
+cp -v ctags ~/.ctags
+
+
 rm -rfv $HOME/.vim
 cp -Rv $DIR/vim/ $HOME/.vim/
 

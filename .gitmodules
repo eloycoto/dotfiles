@@ -34,3 +34,6 @@
 [submodule "vim/bundle/tagbar"]
 	path = vim/bundle/tagbar
 	url = https://github.com/majutsushi/tagbar.git
+[submodule "vim/bundle/vim-ser"]
+	path = vim/bundle/vim-ser
+	url = https://github.com/eloycoto/vim-ser
