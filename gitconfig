@@ -8,6 +8,6 @@
     co = checkout
     amend = commit --amend
 [core]
-	editor = mvim -f
+	#editor = mvim -f
 [push]
 	default = matching

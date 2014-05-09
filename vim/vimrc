@@ -9,7 +9,7 @@ filetype plugin on
 
 let mapleader=','
 
-""Normal set 
+""Normal set
 set cursorline
 set showmode
 set history=1000
@@ -73,7 +73,7 @@ autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 
 
-autocmd BufWrite *.py :call Flake8()
+"autocmd BufWrite *.py :call Flake8()
 
 let g:SuperTabDefaultCompletionType = "context"
 
@@ -122,7 +122,7 @@ vmap <silent><C-r> :NERDTreeToggle <CR>
 "" Set Home for the current file
 map <C-ha :call CallHome()<CR>
 vmap <C-h> :call CallHome()<CR>
-function! CallHome() 
+function! CallHome()
     :cd %:p:h
     :pwd
 endfunction
@@ -141,8 +141,8 @@ func! DeleteTrailingWS()
     %s/\s\+$//ge
     exe "normal `z"
 endfunc
-autocmd BufWrite *.py :call DeleteTrailingWS()
-
+"autocmd BufWrite *.py :call DeleteTrailingWS()
+autocmd BufWritePre * :%s/\s\+$//e
 
 ""Ser/Kamailio or Opensips
 let g:tagbar_type_ser = {

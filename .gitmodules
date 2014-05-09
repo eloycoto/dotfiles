@@ -37,3 +37,6 @@
 [submodule "vim/bundle/vim-ser"]
 	path = vim/bundle/vim-ser
 	url = https://github.com/eloycoto/vim-ser
+[submodule "vim/bundle/Dockerfile"]
+	path = vim/bundle/Dockerfile
+	url = https://github.com/ekalinin/Dockerfile.vim.git

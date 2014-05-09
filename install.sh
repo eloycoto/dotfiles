@@ -25,6 +25,14 @@ then
 fi
 cp -v ctags ~/.ctags
 
+if [ -f ~/.dev_requirements.txt ]
+then
+    mv ~/.dev_requirements.txt ~/.dev_requirements.txt-$DATE
+fi
+cp -v dev_requirements.txt ~/.dev_requirements.txt
+
+#Move tmux config to home folder
+cp -v tmux.conf ~/.tmux.conf
 
 rm -rfv $HOME/.vim
 cp -Rv $DIR/vim/ $HOME/.vim/
