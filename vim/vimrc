@@ -1,5 +1,6 @@
 call pathogen#infect()
-
+" For colors follow this link:
+" http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
 set nocompatible
 syntax on
 let $VIMHOME = $HOME."/.vim"
@@ -18,7 +19,7 @@ set ruler
 set ic
 set splitbelow
 set splitright
-
+set laststatus=2
 
 " Keep 3 lines after/before the cursor
 set so=3
@@ -40,11 +41,18 @@ vnoremap > >gv
 set clipboard=unnamed
 
 "setlocal colorcolumn=81
-highlight ColorColumn guibg=#000000
+autocmd ColorScheme * hi ColorColumn ctermbg=241 guibg=None ctermfg=NONE guifg=NONE
+function! g:ToggleColorColumn()
+    if &colorcolumn != ''
+        setlocal colorcolumn&
+    else
+        setlocal colorcolumn=+1
+    endif
+endfunction
 
+nnoremap <silent> <leader>c :call g:ToggleColorColumn()<CR>
 
-" Colors
-autocmd ColorScheme * hi ColorColumn ctermbg=Black guibg=Black ctermfg=NONE guifg=NONE
+autocmd ColorScheme * hi SpellBad ctermbg=243 guibg=None ctermfg=NONE guifg=NONE
 
 set expandtab
 au BufWinEnter * set autoindent|set ts=4|set sw=4
@@ -72,11 +80,6 @@ autocmd FileType php set omnifunc=phpcomplete#CompletePHP
 autocmd FileType python set omnifunc=pythoncomplete#Complete
 autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 
-
-"autocmd BufWrite *.py :call Flake8()
-
-let g:SuperTabDefaultCompletionType = "context"
-
 if has("gui_running")
     colorscheme desertEx
     set cursorcolumn
@@ -96,6 +99,8 @@ map <silent><C-t> :tabnew<CR>
 vmap <leader>= :Tabularize /=<CR>
 vmap <leader>: :Tabularize /:\zs<CR>
 
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#virtualenv#enabled = 1
 
 ""Python
 ""let g:pymode = 1
@@ -130,7 +135,7 @@ endfunction
 func! Develop()
     call tagbar#OpenWindow()
     call NERDTreeCWD()
-endfunc
+    endfunc
 command! -nargs=0 Develop call Develop()
 " Add a full develop mode
 map <C-x> :Develop<CR>
@@ -152,3 +157,5 @@ let g:tagbar_type_ser = {
         \ 'r:routes',
     \ ]
 \ }
+
+let g:indentLine_color_term = 239

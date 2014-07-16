@@ -33,6 +33,7 @@ cp -v dev_requirements.txt ~/.dev_requirements.txt
 
 #Move tmux config to home folder
 cp -v tmux.conf ~/.tmux.conf
+cp -v psqlrc ~/.psqlrc
 
 rm -rfv $HOME/.vim
 cp -Rv $DIR/vim/ $HOME/.vim/
@@ -43,10 +44,10 @@ ln -s  $HOME/.vim/vimrc $HOME/.vimrc
 ln -s  $HOME/.vim/vimrc $HOME/.gvimrc
 
 
-cd /tmp/ 
+cd /tmp/
 curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
 if [ $ZSHRC == 1 ];then
-    chsh -s /bin/zsh 
+    chsh -s /bin/zsh
     echo "Installing zsh on the machine"
 fi
 
@@ -59,5 +60,5 @@ if [ -d ~/.gitconfig ]
 then
     mv ~/.gitconfig ~/.gitconfig-$DATE
 fi
-cp -v gitconfig ~/.gitconfig 
+cp -v gitconfig ~/.gitconfig
 
