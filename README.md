@@ -1,12 +1,17 @@
-# Config files
+Config files
+------------
+
 This is my personal config for all my tools. 
 
-#Install 
+Install 
+-------
 
-git clone https://github.com/eloycoto/dotfiles
-./install.sh 
+    git clone https://github.com/eloycoto/dotfiles
+    ./install.sh 
 
-#Waring
+Warning
+-------
+
 - This script change the vimrc config. 
 - This script install zsh as default terminal. 
 - All gitignore files are removed
