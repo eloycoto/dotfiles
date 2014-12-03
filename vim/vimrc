@@ -40,6 +40,9 @@ vnoremap > >gv
 " Better copy&paste
 set clipboard=unnamed
 
+"Backspace fix in mac
+set backspace=start,eol,indent
+
 "setlocal colorcolumn=81
 autocmd ColorScheme * hi ColorColumn ctermbg=241 guibg=None ctermfg=NONE guifg=NONE
 function! g:ToggleColorColumn()

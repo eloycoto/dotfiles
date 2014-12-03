@@ -3,10 +3,11 @@ if [ -e $HOME/bin ]; then
     export PATH=$PATH:$HOME/bin
 fi
 
-if [ $(uname) = "Darwin" ]; then
-    export PATH=$PATH:/Library/Frameworks/Python.framework/Versions/2.7/bin/ 
-fi
+#Go things
+export PATH=$PATH:$HOME/.go/bin
 
+export GOPATH=$HOME/.go/
+export GOROOT=/usr/local/go/
 
 export EDITOR="vim"
 ZSH=$HOME/.oh-my-zsh
