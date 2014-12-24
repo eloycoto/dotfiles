@@ -87,7 +87,8 @@ if has("gui_running")
     colorscheme desertEx
     set cursorcolumn
 else
-    colorscheme default " hack to force the highlight group to be created
+    colorscheme desertEx
+    "colorscheme default " hack to force the highlight group to be created
 endif
 
 
