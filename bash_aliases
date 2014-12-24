@@ -8,7 +8,7 @@ if [ $(uname) =  "Darwin" ]; then
     export PYTHONPATH='/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/'
 else
     alias ls='ls --color=auto'
-    alias ll='ls -l' 
+    alias ll='ls -l'
 fi
 
 #Color
@@ -62,7 +62,7 @@ function dpkg-search(){
 
 alias top10="ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
 
-#logs 
+#logs
 
 
 function urldecode(){
@@ -92,11 +92,11 @@ function jsonCurl(){
 
 #Asterisk
 function ast_start(){
-	/etc/init.d/asterisk start	
+	/etc/init.d/asterisk start
 }
 
 function ast_restart(){
-	/etc/init.d/asterisk start	
+	/etc/init.d/asterisk start
 }
 
 function ast_channels(){
@@ -104,7 +104,7 @@ function ast_channels(){
 }
 
 function ast_pri(){
-	asterisk -rnx "pri show spams"	
+	asterisk -rnx "pri show spams"
 }
 
 function ast_pri_channels(){
@@ -112,7 +112,7 @@ function ast_pri_channels(){
 }
 
 
-#SIP 
+#SIP
 
 alias sip-grep="ngrep -d any -P \"'\" -W byline -T -i port 5060"
 alias sip-bgrep="ngrep -d any -P \"'\" -W byline -T -i -t \"(^|CSeq:\s?\d* )(INVITE|ACK|CANCEL|BYE|MESSAGE|REFER|PRACK|INFO|UPDATE)\" port 5060"
@@ -127,3 +127,7 @@ function convertxcf(){
     done
 }
 
+
+function read_csv(){
+    sed 's/,,/, ,/g;s/,,/, ,/g' $1 | column -s, -t
+}
