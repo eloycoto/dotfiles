@@ -52,13 +52,13 @@ if [ $ZSHRC == 1 ];then
 fi
 
 cd $DIR
+
 cp -Rv zshrc $HOME/.zshrc
 cp -Rv bash_aliases $HOME/.bash_aliases
-
+cp -Rv ssh/* $HOME/.ssh/
 
 if [ -d ~/.gitconfig ]
 then
     mv ~/.gitconfig ~/.gitconfig-$DATE
 fi
 cp -v gitconfig ~/.gitconfig
-
