@@ -145,4 +145,3 @@ function main(){
     #Pbcopy
     while (true); do nc -l 5566 | pbcopy; done
 }
-main&

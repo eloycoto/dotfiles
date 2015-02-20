@@ -16,11 +16,15 @@ plugins=(git virtualenvwrapper python github)
 DISABLE_AUTO_UPDATE=true
 DISABLE_UPDATE_PROMPT=true
 source $ZSH/oh-my-zsh.sh
-if [ $SSH_CONNECTION ];then
-    SERVER=$(echo $SSH_CONNECTION | awk '{print $3}')
-    PROMPT="${SERVER} ${PROMPT}"
-fi
 
 if [ -e $HOME/.bash_aliases ];then
     source $HOME/.bash_aliases
 fi
+
+if [ $SSH_CONNECTION ];then
+    SERVER=$(echo $SSH_CONNECTION | awk '{print $3}')
+    PROMPT="${SERVER} ${PROMPT}"
+else
+    main&
+fi
+
