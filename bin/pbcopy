@@ -1,0 +1,6 @@
+if [ "$SSH_CONNECTION" ];then
+    nc -q0 localhost 5566
+else
+    /usr/bin/pbcopy
+fi
+

@@ -1,8 +1,8 @@
-ipdb==0.8
-ipython==1.2.0
-mccabe==0.2.1
-pyflakes==0.7.3
-pylint==1.1.0
-rope==0.9.4
-pep8==1.4.6
-requests==2.2.1
+ipdb
+ipython
+mccabe
+pyflakes
+pylint
+rope
+pep8
+requests

@@ -23,6 +23,7 @@ if [ -f ~/.ctags ]
 then
     mv ~/.ctags ~/.ctags-$DATE
 fi
+
 cp -v ctags ~/.ctags
 
 if [ -f ~/.dev_requirements.txt ]
@@ -34,19 +35,19 @@ cp -v dev_requirements.txt ~/.dev_requirements.txt
 #Move tmux config to home folder
 cp -v tmux.conf ~/.tmux.conf
 cp -v psqlrc ~/.psqlrc
+cp -Rfv bin ~/bin
+
 
 rm -rfv $HOME/.vim
 cp -Rv $DIR/vim/ $HOME/.vim/
 
 rm  $HOME/.vimrc
-rm  $HOME/.gvimrc
 ln -s  $HOME/.vim/vimrc $HOME/.vimrc
-ln -s  $HOME/.vim/vimrc $HOME/.gvimrc
-
 
 cd /tmp/
 curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
-if [ $ZSHRC == 1 ];then
+if [ $ZSHRC  ];
+then
     chsh -s /bin/zsh
     echo "Installing zsh on the machine"
 fi
@@ -62,3 +63,5 @@ then
     mv ~/.gitconfig ~/.gitconfig-$DATE
 fi
 cp -v gitconfig ~/.gitconfig
+
+sudo pip install virtualenvwrapper
