@@ -65,3 +65,12 @@ fi
 cp -v gitconfig ~/.gitconfig
 
 sudo pip install virtualenvwrapper
+
+if [ $(uname) =  "Darwin" ]; then
+    cp launch/* ~/Library/LaunchAgents/
+    ls -1 launch/* | while read line;
+    do
+        lib=$(echo $line | awk -F '/' '{print $2}')
+        echo "launchctl load ~/Library/LaunchAgents/$lib"
+    done
+fi

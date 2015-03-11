@@ -131,13 +131,3 @@ function convertxcf(){
 function read_csv(){
     sed 's/,,/, ,/g;s/,,/, ,/g' $1 | column -s, -t
 }
-
-
-function main(){
-    #Pbcopy
-    nc -z localhost 5566 &> /dev/null
-    if [ $? ];
-    then
-        while (true); do nc -l 5566 | pbcopy; done
-    fi
-}
