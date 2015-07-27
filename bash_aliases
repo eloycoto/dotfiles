@@ -1,4 +1,5 @@
-alias s='sudo'
+alias s='sudo -E'
+alias sudo='sudo -E'
 
 if [ $(uname) =  "Darwin" ]; then
     #Darwing support for commands
