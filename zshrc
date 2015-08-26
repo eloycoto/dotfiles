@@ -25,5 +25,6 @@ fi
 if [ $SSH_CONNECTION ];then
     SERVER=$(echo $SSH_CONNECTION | awk '{print $3}')
     PROMPT="${SERVER} ${PROMPT}"
+else
+    SERVER='local'
 fi
-
