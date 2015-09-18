@@ -118,6 +118,8 @@ function ast_pri_channels(){
 alias sip-grep="ngrep -d any -P \"'\" -W byline -T -i port 5060"
 alias sip-bgrep="ngrep -d any -P \"'\" -W byline -T -i -t \"(^|CSeq:\s?\d* )(INVITE|ACK|CANCEL|BYE|MESSAGE|REFER|PRACK|INFO|UPDATE)\" port 5060"
 
+alias cgrep="ngrep -d any -P \"'\" -W byline -T -i"
+
 #other
 function convertxcf(){
     ls -1 | grep xcf | while read line;
