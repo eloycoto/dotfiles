@@ -11,3 +11,5 @@ mv go /usr/local
 rm /tmp/$GO_VERSION
 cd /usr/local/bin/
 ln -s /usr/local/go/bin/* .
+
+go get github.com/Masterminds/glide
