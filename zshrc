@@ -22,7 +22,7 @@ if [ -e $HOME/.bash_aliases ];then
     source $HOME/.bash_aliases
 fi
 
-if [ $SSH_CONNECTION ];then
+if [ $(uname) != "Darwin" ];then
     SERVER=$(echo $SSH_CONNECTION | awk '{print $3}')
     PROMPT="${SERVER} ${PROMPT}"
 else

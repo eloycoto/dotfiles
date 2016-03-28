@@ -1,4 +1,4 @@
-if [ "$SSH_CONNECTION" ];then
+if [ $(uname) != "Darwin" ];then
     nc -q0 localhost 5566
 else
     /usr/bin/pbcopy
