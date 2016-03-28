@@ -88,10 +88,10 @@ autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 autocmd BufRead,BufNewFile *.rst setlocal textwidth=80
 
 if has("gui_running")
-    colorscheme desertEx
+    colorscheme molokai
     set cursorcolumn
 else
-    colorscheme desertEx
+    colorscheme molokai
     "colorscheme default " hack to force the highlight group to be created
 endif
 
