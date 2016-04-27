@@ -7,7 +7,14 @@
     st = status
     co = checkout
     amend = commit --amend
-[core]
-	#editor = mvim -f
+
+    branches = branch -a
+    tags = tag
+    stashes = stash list
+
+    unstage = reset -q HEAD --
+    discard = checkout --
+    uncommit = reset --mixed HEAD~
+
 [push]
 	default = matching
