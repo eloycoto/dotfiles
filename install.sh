@@ -35,6 +35,7 @@ cp -v dev_requirements.txt ~/.dev_requirements.txt
 #Move tmux config to home folder
 cp -v tmux.conf ~/.tmux.conf
 cp -v psqlrc ~/.psqlrc
+cp -rfv psqlrc_alias ~/.psqlrc_alias
 cp -Rfv bin ~/bin
 
 
