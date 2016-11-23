@@ -37,6 +37,10 @@ set nowb
 vnoremap < <gv
 vnoremap > >gv
 
+" codeblocks up/down
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
 " Better copy&paste
 set clipboard=unnamed
 
