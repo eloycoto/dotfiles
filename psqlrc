@@ -37,3 +37,4 @@
 \set leader_rep `cat ~/.psqlrc_alias/leader_rep.sql`
 \set locks `cat ~/.psqlrc_alias/locks.sql`
 \set seq_scans  `cat ~/.psqlrc_alias/seq_scans.sql`
+\set index_status  `cat ~/.psqlrc_alias/index_rate.sql`
