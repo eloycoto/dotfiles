@@ -112,9 +112,11 @@ function ast_pri_channels(){
 	asterisk -nrx "pri show channels" |grep "^\ " | awk '{if ($7 != "") print "Port "$1}' | uniq -c
 }
 
+#TMUX
+alias tcr="for i in \$(tmux list-windows | awk -v x=\$(tmux display-message -p '#I') -F ':' '\$1 > x {print \$1}'); do tmux kill-window -t \$i ; done"
+
 
 #SIP
-
 alias sip-grep="ngrep -d any -P \"'\" -W byline -T -i port 5060"
 alias sip-bgrep="ngrep -d any -P \"'\" -W byline -T -i -t \"(^|CSeq:\s?\d* )(INVITE|ACK|CANCEL|BYE|MESSAGE|REFER|PRACK|INFO|UPDATE)\" port 5060"
 
