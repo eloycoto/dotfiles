@@ -51,7 +51,10 @@ set backspace=start,eol,indent
 autocmd ColorScheme * hi Visual term=reverse cterm=reverse ctermfg=10 ctermbg=8 guibg=DarkGrey
 autocmd ColorScheme * hi SpellBad ctermfg=160 ctermbg=8
 
-:set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
+if has("patch-7.4.710")
+    set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
+endif
+
 "setlocal colorcolumn=81
 match ColorColumn '\%>80v.\+'
 autocmd ColorScheme * hi ColorColumn ctermbg=241 guibg=None ctermfg=NONE guifg=NONE
