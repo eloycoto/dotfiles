@@ -57,7 +57,7 @@ endif
 
 "setlocal colorcolumn=81
 match ColorColumn '\%>80v.\+'
-autocmd ColorScheme * hi ColorColumn ctermbg=241 guibg=None ctermfg=NONE guifg=NONE
+autocmd ColorScheme * hi ColorColumn ctermbg=241
 function! g:ToggleColorColumn()
     if &colorcolumn != ''
         setlocal colorcolumn&
