@@ -40,6 +40,12 @@
 [submodule "vim/bundle/vim-eighties"]
 	path = vim/bundle/vim-eighties
 	url = https://github.com/justincampbell/vim-eighties
+[submodule "vim/bundle/syntastic"]
+	path = vim/bundle/syntastic
+	url = https://github.com/vim-syntastic/syntastic
 [submodule "vim/bundle/vim-addon-mw-utils"]
 	path = vim/bundle/vim-addon-mw-utils
-	url = https://github.com/garbas/vim-snipmate
+	url = https://github.com/marcweber/vim-addon-mw-utils
+[submodule "vim/bundle/vim-snippets"]
+	path = vim/bundle/vim-snippets
+	url = https://github.com/honza/vim-snippets
