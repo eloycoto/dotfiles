@@ -44,6 +44,7 @@ cp -Rv $DIR/vim/ $HOME/.vim/
 
 rm  $HOME/.vimrc
 ln -s  $HOME/.vim/vimrc $HOME/.vimrc
+exit 0;
 
 cd /tmp/
 curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
