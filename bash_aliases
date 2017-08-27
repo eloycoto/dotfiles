@@ -12,6 +12,10 @@ else
     alias ll='ls -l'
 fi
 
+if [[ $(command -v vimx) ]]; then
+    alias vim='vimx'
+fi
+
 #Color
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'

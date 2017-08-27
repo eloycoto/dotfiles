@@ -17,6 +17,7 @@ plugins=(git virtualenvwrapper python github tmux)
 DISABLE_AUTO_UPDATE=true
 DISABLE_UPDATE_PROMPT=true
 source $ZSH/oh-my-zsh.sh
+
 if [[ $(command -v direnv) ]]; then
     eval "$(direnv hook $SHELL)"
 fi
