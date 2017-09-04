@@ -129,6 +129,13 @@ let g:pymode_doc = 1
 let g:pymode_doc_key = 'K'
 let g:pymode_folding = 0
 
+"""Golang
+let g:go_fmt_command = "goimports"
+let g:go_highlight_types = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_auto_type_info = 1
+
 xmap <Leader>c <Plug>Commentary
 
 augroup plugin_commentary
