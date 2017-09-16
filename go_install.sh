@@ -12,4 +12,9 @@ rm /tmp/$GO_VERSION
 cd /usr/local/bin/
 ln -s /usr/local/go/bin/* .
 
+export GOPATH=$HOME/.go/
+export GOROOT=/usr/local/go/
+
 go get github.com/Masterminds/glide
+go get github.com/LK4D4/vndr
+go get -u github.com/jteeuwen/go-bindata/...

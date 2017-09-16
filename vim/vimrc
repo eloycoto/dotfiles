@@ -49,6 +49,16 @@ set backspace=start,eol,indent
 
 "Ctrl-P
 let g:ctrlp_map = '<c-p>'
+let g:ctrlp_cmd = 'CtrlPMRU'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_switch_buffer = 'et'  " jump to a file if it's open already
+let g:ctrlp_mruf_max=450    " number of recently opened files
+let g:ctrlp_max_files=0     " do not limit the number of searchable files
+let g:ctrlp_use_caching = 1
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
+let g:ctrlp_match_window = 'bottom,order:btt,max:10,results:10'
+let g:ctrlp_buftag_types = {'go' : '--language-force=go --golang-types=ftv'}
 
 "Colorscheme changes
 autocmd ColorScheme * hi Visual term=reverse cterm=reverse ctermfg=10 ctermbg=8 guibg=DarkGrey
@@ -135,6 +145,9 @@ let g:go_highlight_types = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_auto_type_info = 1
+let g:go_metalinter_autosave = 1
+let g:syntastic_go_checkers = ['govet', 'errcheck', 'go']
+let g:go_auto_sameids = 1
 
 xmap <Leader>c <Plug>Commentary
 
@@ -159,15 +172,6 @@ function! CallHome()
     :cd %:p:h
     :pwd
 endfunction
-
-func! Develop()
-    call tagbar#OpenWindow()
-    call NERDTreeCWD()
-    endfunc
-command! -nargs=0 Develop call Develop()
-" Add a full develop mode
-map <C-x> :Develop<CR>
-vmap <C-x> :Develop<CR>
 
 func! DeleteTrailingWS()
     exe "normal mz"

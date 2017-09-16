@@ -140,3 +140,7 @@ function convertxcf(){
 function read_csv(){
     sed 's/,,/, ,/g;s/,,/, ,/g' $1 | column -s, -t
 }
+
+
+#Docker commands
+alias do_cleanup_exited="docker rm $(docker ps -a --filter='status=exited' -q)"
