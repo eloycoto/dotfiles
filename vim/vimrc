@@ -109,6 +109,9 @@ autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
 autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 autocmd BufRead,BufNewFile *.rst setlocal textwidth=80
 
+"C-b to autocompelte all
+:inoremap <C-b> <C-x><C-o>
+
 if has("gui_running")
     colorscheme molokai
     set cursorcolumn
