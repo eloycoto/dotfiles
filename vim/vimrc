@@ -41,6 +41,11 @@ vnoremap > >gv
 vnoremap J :m '>+1<CR>gv=gv
 vnoremap K :m '<-2<CR>gv=gv
 
+" Some useful quickfix shortcuts for quickfix
+map <C-n> :cn<CR>
+map <C-m> :cp<CR>
+nnoremap <leader>a :cclose<CR>
+
 " Better copy&paste
 set clipboard=unnamed
 
@@ -111,6 +116,7 @@ autocmd BufRead,BufNewFile *.rst setlocal textwidth=80
 
 "C-b to autocompelte all
 :inoremap <C-b> <C-x><C-o>
+let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
 if has("gui_running")
     colorscheme molokai
