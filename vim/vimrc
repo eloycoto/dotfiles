@@ -54,7 +54,6 @@ set backspace=start,eol,indent
 
 "Ctrl-P
 let g:ctrlp_map = '<c-p>'
-let g:ctrlp_cmd = 'CtrlPMRU'
 let g:ctrlp_working_path_mode = 'ra'
 let g:ctrlp_switch_buffer = 'et'  " jump to a file if it's open already
 let g:ctrlp_mruf_max=450    " number of recently opened files
