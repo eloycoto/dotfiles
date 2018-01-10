@@ -1,6 +1,20 @@
-call pathogen#infect()
-" For colors follow this link:
-" http://www.calmar.ws/vim/256-xterm-24bit-rgb-color-chart.html
+call plug#begin('~/.vim/plugged')
+
+Plug 'fatih/vim-go'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'kien/ctrlp.vim'
+Plug 'majutsushi/tagbar'
+Plug 'tpope/vim-commentary'
+Plug 'airblade/vim-gitgutter'
+Plug 'vim-syntastic/syntastic'
+Plug 'ervandew/supertab'
+Plug 'marcweber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'flazz/vim-colorschemes'
+
+call plug#end()
+
 set nocompatible
 syntax on
 let $VIMHOME = $HOME."/.vim"
@@ -74,16 +88,7 @@ endif
 
 "setlocal colorcolumn=81
 match ColorColumn '\%>80v.\+'
-autocmd ColorScheme * hi ColorColumn ctermbg=241
-function! g:ToggleColorColumn()
-    if &colorcolumn != ''
-        setlocal colorcolumn&
-    else
-        setlocal colorcolumn=+1
-    endif
-endfunction
-
-nnoremap <silent> <leader>c :call g:ToggleColorColumn()<CR>
+autocmd ColorScheme *.go,*py,*.c hi ColorColumn ctermbg=241
 
 set expandtab
 au BufWinEnter * set autoindent|set ts=4|set sw=4
@@ -117,14 +122,6 @@ autocmd BufRead,BufNewFile *.rst setlocal textwidth=80
 :inoremap <C-b> <C-x><C-o>
 let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
-if has("gui_running")
-    colorscheme molokai
-    set cursorcolumn
-else
-    colorscheme molokai
-    "colorscheme default " hack to force the highlight group to be created
-endif
-
 
 set guitablabel=%M%t
 map <silent><C-m> :tabnext<CR>
@@ -133,13 +130,9 @@ map <silent><C-n> :tabprevious<CR>
 map <silent><C-j> :tabprevious<CR>
 map <silent><C-t> :tabnew<CR>
 
-""TabLeader
-vmap <leader>= :Tabularize /=<CR>
-vmap <leader>: :Tabularize /:\zs<CR>
-
+let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#virtualenv#enabled = 1
-let g:airline#extensions#tabline#enabled = 1
 
 ""Python
 ""let g:pymode = 1
@@ -148,14 +141,15 @@ let g:pymode_doc_key = 'K'
 let g:pymode_folding = 0
 
 """Golang
+let g:go_auto_sameids = 1
+let g:go_auto_type_info = 1
 let g:go_fmt_command = "goimports"
-let g:go_highlight_types = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
-let g:go_auto_type_info = 1
+let g:go_highlight_types = 1
 let g:go_metalinter_autosave = 1
 let g:syntastic_go_checkers = ['govet', 'errcheck', 'go']
-let g:go_auto_sameids = 1
+let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
 
 xmap <Leader>c <Plug>Commentary
 
@@ -167,40 +161,12 @@ augroup plugin_commentary
     au FileType puppet setlocal commentstring=#\ %s
 augroup END
 
-map <C-a> :TagbarToggle<CR>
-vmap <C-a> :TagbarToggle<CR>
-
 map <silent><C-r> :NERDTreeToggle <CR>
 vmap <silent><C-r> :NERDTreeToggle <CR>
 
-"" Set Home for the current file
-map <C-ha :call CallHome()<CR>
-vmap <C-h> :call CallHome()<CR>
-function! CallHome()
-    :cd %:p:h
-    :pwd
-endfunction
-
-func! DeleteTrailingWS()
-    exe "normal mz"
-    %s/\s\+$//ge
-    exe "normal `z"
-endfunc
-"autocmd BufWrite *.py :call DeleteTrailingWS()
+" Delete trailing spaces
 autocmd BufWritePre * :%s/\s\+$//e
-
-""Ser/Kamailio or Opensips
-let g:tagbar_type_ser = {
-    \ 'ctagstype' : 'ser',
-    \ 'kinds' : [
-        \ 'a:Avp',
-        \ 'r:routes',
-    \ ]
-\ }
 
 let g:indentLine_color_term = 239
 
-let g:eighties_enabled = 1
-let g:eighties_minimum_width = 80
-let g:eighties_extra_width = 0 " Increase this if you want some extra room
-let g:eighties_compute = 1 " Disable this if you just want the minimum + extra
+
