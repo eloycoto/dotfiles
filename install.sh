@@ -16,6 +16,11 @@ cp -rfv psqlrc_alias ~/.psqlrc_alias
 cp -Rfv bin ~/bin
 cp -v dev_requirements.txt ~/.dev_requirements.txt
 
+rm -rf ~/.tmux/
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+git clone https://github.com/tmux-plugins/tmux-yank ~/.tmux/plugins/tmux-yank
+git clone https://github.com/tmux-plugins/tmux-copycat ~/.tmux/plugins/tmux-copycat
+
 cd /tmp/
 curl -L https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh | sh
 if [ $ZSHRC  ];
