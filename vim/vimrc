@@ -7,7 +7,7 @@ Plug 'kien/ctrlp.vim'
 Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-commentary'
 Plug 'airblade/vim-gitgutter'
-Plug 'vim-syntastic/syntastic'
+Plug 'neomake/neomake'
 Plug 'ervandew/supertab'
 Plug 'marcweber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
@@ -151,9 +151,41 @@ let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 let g:go_highlight_types = 1
 let g:go_metalinter_autosave = 1
-let g:syntastic_go_checkers = ['govet', 'errcheck', 'go']
-let g:syntastic_mode_map = { 'mode': 'active', 'passive_filetypes': ['go'] }
+let g:go_def_mapping_enabled = 0
+let g:go_fmt_fail_silently = 1
+let g:go_term_enabled = 1
 
+""" NeoMake
+autocmd BufWritePost * Neomake
+let g:neomake_error_sign   = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
+let g:neomake_warning_sign = {'text': '∆', 'texthl': 'NeomakeWarningSign'}
+let g:neomake_message_sign = {'text': '➤', 'texthl': 'NeomakeMessageSign'}
+let g:neomake_info_sign    = {'text': 'ℹ', 'texthl': 'NeomakeInfoSign'}
+let g:neomake_go_enabled_makers = [ 'go', 'gometalinter' ]
+let g:neomake_go_gometalinter_maker = {
+  \ 'args': [
+  \   '--tests',
+  \   '--enable-gc',
+  \   '--concurrency=3',
+  \   '--fast',
+  \   '-D', 'aligncheck',
+  \   '-D', 'dupl',
+  \   '-D', 'gocyclo',
+  \   '-D', 'gotype',
+  \   '-E', 'errcheck',
+  \   '-E', 'misspell',
+  \   '-E', 'unused',
+  \   '%:p:h',
+  \ ],
+  \ 'append_file': 0,
+  \ 'errorformat':
+  \   '%E%f:%l:%c:%trror: %m,' .
+  \   '%W%f:%l:%c:%tarning: %m,' .
+  \   '%E%f:%l::%trror: %m,' .
+  \   '%W%f:%l::%tarning: %m'
+  \ }
+
+""" Commentary
 xmap <Leader>c <Plug>Commentary
 
 augroup plugin_commentary
