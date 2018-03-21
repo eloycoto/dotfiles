@@ -90,8 +90,11 @@ if has("patch-7.4.710")
 endif
 
 "setlocal colorcolumn=81
-match ColorColumn '\%>80v.\+'
-autocmd ColorScheme *.go,*py,*.c hi ColorColumn ctermbg=241
+" match ColorColumn '\%>80v.\+'
+" autocmd ColorScheme *.go,*py,*.c hi ColorColumn ctermbg=241
+let &colorcolumn=join(range(100,999),",")
+
+highlight ColorColumn ctermbg=234
 
 set expandtab
 au BufWinEnter * set autoindent|set ts=4|set sw=4
@@ -144,16 +147,35 @@ let g:pymode_doc_key = 'K'
 let g:pymode_folding = 0
 
 """Golang
-let g:go_auto_sameids = 1
-let g:go_auto_type_info = 1
+let g:go_auto_sameids = 0
+let g:go_auto_type_info = 0
 let g:go_fmt_command = "goimports"
-let g:go_highlight_functions = 1
-let g:go_highlight_methods = 1
-let g:go_highlight_types = 1
+let g:go_highlight_functions = 0
+let g:go_highlight_methods = 0
+let g:go_highlight_types = 0
 let g:go_metalinter_autosave = 1
 let g:go_def_mapping_enabled = 0
 let g:go_fmt_fail_silently = 1
 let g:go_term_enabled = 1
+let g:go_autodetect_gopath = 1
+
+augroup go
+	autocmd!
+	nnoremap <buffer> <silent> gd :GoDef<cr>
+
+	autocmd FileType go nmap <silent> <Leader>v <Plug>(go-def-vertical)
+	autocmd FileType go nmap <silent> <Leader>s <Plug>(go-def-split)
+	autocmd FileType go nmap <silent> <Leader>d <Plug>(go-def-tab)
+
+	autocmd FileType go nmap <silent> <Leader>x <Plug>(go-doc-vertical)
+
+	autocmd FileType go nmap <silent> <Leader>i <Plug>(go-info)
+	autocmd FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
+
+    nnoremap <leader>b oruntime.Breakpoint()<Esc>
+augroup END
+
+
 
 """ NeoMake
 autocmd BufWritePost * Neomake
