@@ -12,6 +12,7 @@ Plug 'marcweber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'flazz/vim-colorschemes'
 Plug 'Valloric/YouCompleteMe'
+Plug 'junegunn/vim-easy-align'
 call plug#end()
 
 set nocompatible
@@ -229,4 +230,22 @@ autocmd BufWritePre * :%s/\s\+$//e
 
 let g:indentLine_color_term = 239
 
+function! SendToJq(jqFilter) range
+    let saved_register = @*
+    normal! `<v`>y
+    new
+    normal! P
+    let @* = saved_register
+    silent exec ':%! jq -r ''' . a:jqFilter . ''''
+endfunction
 
+function! CreateTableUsingJQ(jqFilter) range
+    silent call SendToJq(a:jqFilter)
+    silent exec ':%EasyAlign *\ '
+    silent exec ':%s/''//g'
+endfunction
+
+vnoremap JJ :call SendToJq(".")<CR>
+
+command! -nargs=* -range PodStatus call CreateTableUsingJQ('.items[] | [(.metadata.namespace+":"+.metadata.name), (.spec.containers | length), (.status.podIP), .spec.nodeName] | @sh')<CR>
+command! -nargs=* -range JQ call SendToJq('.')
