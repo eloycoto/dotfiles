@@ -3,7 +3,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'fatih/vim-go'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'kien/ctrlp.vim'
+Plug 'ctrlpvim/ctrlp.vim'
 Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-commentary'
 Plug 'airblade/vim-gitgutter'
@@ -13,6 +13,7 @@ Plug 'tomtom/tlib_vim'
 Plug 'flazz/vim-colorschemes'
 Plug 'Valloric/YouCompleteMe'
 Plug 'junegunn/vim-easy-align'
+Plug 'sirtaj/vim-openscad'
 call plug#end()
 
 set nocompatible
@@ -21,6 +22,8 @@ let $VIMHOME = $HOME."/.vim"
 
 filetype on
 filetype plugin on
+
+set vb t_vb=
 
 let mapleader=','
 
@@ -46,6 +49,9 @@ set noswapfile
 set nobackup
 set nowb
 
+""foldmethod
+" set nofoldenable
+" set foldmethod=manual
 " ColorScheme
 colorscheme molokai
 set t_Co=256
