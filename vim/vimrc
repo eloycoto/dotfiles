@@ -251,7 +251,7 @@ function! CreateTableUsingJQ(jqFilter) range
     silent exec ':%s/''//g'
 endfunction
 
-vnoremap JJ :call SendToJq(".")<CR>
+vnoremap PS :call SendToJq(".")<CR>
 
 command! -nargs=* -range PodStatus call CreateTableUsingJQ('.items[] | [(.metadata.namespace+":"+.metadata.name), (.spec.containers | length), (.status.podIP), .spec.nodeName] | @sh')<CR>
 command! -nargs=* -range JQ call SendToJq('.')

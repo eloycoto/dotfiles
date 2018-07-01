@@ -4,7 +4,6 @@ highlight link ginkgoCallbacks Identifier
 syntax keyword ginkgoGroups By Context Describe It Specify
 highlight link ginkgoGroups Function
 
-
-syntax keyword gomegaGroups Expect ExpectWithOffset Should To ExpectFail ExpectSuccess
+syntax keyword gomegaGroups Expect ExpectWithOffset Should ShouldNot To NotTo ExpectFail ExpectSuccess
 highlight link gomegaGroups goSpecialString
 
