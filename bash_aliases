@@ -116,6 +116,20 @@ function ast_pri_channels(){
 	asterisk -nrx "pri show channels" |grep "^\ " | awk '{if ($7 != "") print "Port "$1}' | uniq -c
 }
 
+function sysdump_unarchive() {
+    mkdir -p $ARCHIVE
+    ARCHIVE="archive"
+    for line in $(ls bugtool-cilium-*.tar);do
+        POD=$(echo $line | awk -F '-' '{print $2"-"$3}')
+        rm -r $POD 2>/dev/null || true
+        echo "Unarchive ${line} to ${POD}"
+        folder=$(mktemp -d)
+        tar -xf $line -C $folder --strip-components=1
+        mv ${folder}/cmd ${POD}
+        mv $line $ARCHIVE
+    done
+}
+
 #TMUX
 alias tcr="for i in \$(tmux list-windows | awk -v x=\$(tmux display-message -p '#I') -F ':' '\$1 > x {print \$1}'); do tmux kill-window -t \$i ; done"
 
