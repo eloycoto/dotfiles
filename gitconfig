@@ -6,7 +6,8 @@
     cm = commit -am
     st = status
     co = checkout
-    amend = commit --amend
+    amend = commit --amend -s
+    commit = commit -s
 
     branches = branch -a
     tags = tag
@@ -15,6 +16,10 @@
     unstage = reset -q HEAD --
     discard = checkout --
     uncommit = reset --mixed HEAD~
+    pr = !"pr() { git fetch origin pull/$1/head:pr-$1; git checkout pr-$1; }; pr"
 
 [push]
-	default = matching
+    default = matching
+
+[rebase]
+    autoStash = true
