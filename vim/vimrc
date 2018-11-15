@@ -14,6 +14,7 @@ Plug 'flazz/vim-colorschemes'
 Plug 'Valloric/YouCompleteMe'
 Plug 'junegunn/vim-easy-align'
 Plug 'sirtaj/vim-openscad'
+Plug 'mileszs/ack.vim'
 call plug#end()
 
 set nocompatible
@@ -74,6 +75,12 @@ set clipboard=unnamed
 
 "Backspace fix in mac
 set backspace=start,eol,indent
+
+if has("gui_running")
+    imap <C-v> <ESC>"+pa
+    nmap <C-v> <ESC>"+pa
+    cnoremap <C-v> <ESC>"+pa
+endif
 
 "Ctrl-P
 let g:ctrlp_map = '<c-p>'
@@ -185,8 +192,6 @@ augroup go
     nnoremap <leader>b oruntime.Breakpoint()<Esc>
 augroup END
 
-
-
 """ NeoMake
 autocmd BufWritePost * Neomake
 let g:neomake_error_sign   = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
@@ -255,3 +260,14 @@ vnoremap PS :call SendToJq(".")<CR>
 
 command! -nargs=* -range PodStatus call CreateTableUsingJQ('.items[] | [(.metadata.namespace+":"+.metadata.name), (.spec.containers | length), (.status.podIP), .spec.nodeName] | @sh')<CR>
 command! -nargs=* -range JQ call SendToJq('.')
+
+
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+" Zoom one pane
+nnoremap <leader>z <C-W><C-\|><C-W><C-_>
+" Restore panes
+nnoremap <leader>= <C-w><C-=>

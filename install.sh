@@ -6,15 +6,17 @@ ZSHRC=1
 
 
 #Vims conf
-cp -v ctags ~/.ctags
+
 rm -rf $HOME/.vim
 cp -Rv $DIR/vim/ $HOME/.vim/
 ln -sf  $HOME/.vim/vimrc $HOME/.vimrc
-cp -v tmux.conf ~/.tmux.conf
-cp -v psqlrc ~/.psqlrc
-cp -rfv psqlrc_alias ~/.psqlrc_alias
 cp -Rfv bin ~/bin
-cp -v dev_requirements.txt ~/.dev_requirements.txt
+cp -rfv ackrc ~/.ackrc
+cp -rfv dev_requirements.txt ~/.dev_requirements.txt
+cp -rfv psqlrc ~/.psqlrc
+cp -rfv psqlrc_alias ~/.psqlrc_alias
+cp -rfv tmux.conf ~/.tmux.conf
+cp -rfv ctags ~/.ctags
 
 rm -rf ~/.tmux/
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
