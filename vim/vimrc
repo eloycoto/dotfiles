@@ -15,6 +15,7 @@ Plug 'Valloric/YouCompleteMe'
 Plug 'junegunn/vim-easy-align'
 Plug 'sirtaj/vim-openscad'
 Plug 'mileszs/ack.vim'
+Plug 'tomasiser/vim-code-dark'
 call plug#end()
 
 set nocompatible
@@ -54,8 +55,9 @@ set nowb
 " set nofoldenable
 " set foldmethod=manual
 " ColorScheme
-colorscheme molokai
 set t_Co=256
+set t_ut=
+colorscheme codedark
 
 " Move codeblocks
 vnoremap < <gv
