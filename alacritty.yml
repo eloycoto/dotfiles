@@ -9,7 +9,7 @@ window:
 
   padding:
     x: 2
-    y: 5
+    y: 0
 
   decorations: full
 
