@@ -158,3 +158,8 @@ function read_csv(){
 
 #Docker commands
 alias do_cleanup_exited="docker rm $(docker ps -a --filter='status=exited' -q)"
+
+
+function jqr(){
+    jq -r $1 | column -t
+}

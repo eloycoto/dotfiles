@@ -17,6 +17,7 @@ cp -rfv psqlrc ~/.psqlrc
 cp -rfv psqlrc_alias ~/.psqlrc_alias
 cp -rfv tmux.conf ~/.tmux.conf
 cp -rfv ctags ~/.ctags
+cp -rfv jq ~/.jq
 
 rm -rf ~/.tmux/
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
