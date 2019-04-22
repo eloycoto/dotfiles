@@ -11,11 +11,11 @@ Plug 'neomake/neomake'
 Plug 'marcweber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'flazz/vim-colorschemes'
-Plug 'Valloric/YouCompleteMe'
 Plug 'junegunn/vim-easy-align'
 Plug 'sirtaj/vim-openscad'
 Plug 'mileszs/ack.vim'
 Plug 'tomasiser/vim-code-dark'
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 call plug#end()
 
 set nocompatible
@@ -128,25 +128,18 @@ map <Leader><Leader> $<CR>
 ""Sort lines
 vmap <leader>s :sort u<CR>
 
-""Autocomplete functions
-autocmd FileType c set omnifunc=ccomplete#Complete
-autocmd FileType css set omnifunc=csscomplete#CompleteCSS
-autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
-autocmd FileType php set omnifunc=phpcomplete#CompletePHP
-autocmd FileType python set omnifunc=pythoncomplete#Complete
-autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)map <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)omplete functions
+
+
 autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 autocmd BufRead,BufNewFile *.rst setlocal textwidth=80
 
-""C-b to autocompelte all
-":inoremap <C-b> <C-x><C-o>
-"let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
-
-" YouCompleteMe
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_autoclose_preview_window_after_insertion = 1
-set completeopt-=preview
 
 set guitablabel=%M%t
 map <silent><C-m> :tabnext<CR>
@@ -193,6 +186,7 @@ augroup go
 
     nnoremap <leader>b oruntime.Breakpoint()<Esc>
 augroup END
+
 
 """ NeoMake
 autocmd BufWritePost * Neomake
