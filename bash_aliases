@@ -163,3 +163,15 @@ alias do_cleanup_exited="docker rm $(docker ps -a --filter='status=exited' -q)"
 function jqr(){
     jq -r $1 | column -t
 }
+
+function decodeEndpointConfig(){
+    ENDPOINT_ID=$1
+    # sudo cat /var/run/cilium/state/$ENDPOINT_ID/lxc_config.h  | grep "* CILIUM_BASE64_I" | awk -F ":" '{print $2}' | base64 -d | jq .
+    sudo cat /tmp/state/$ENDPOINT_ID/lxc_config.h  | grep "* CILIUM_BASE64_I" | awk -F ":" '{print $2}' | base64 -d | jq .
+}
+
+func startCilium(){
+    sudo cilium-agent --kvstore etcd --kvstore-opt etcd.address=http://k8s1:9732 \
+        --k8s-kubeconfig-path /home/vagrant/.kube/config \
+        --tofqdns-endpoint-max-ip-per-hostname 1 > /tmp/log 2>&1 ^C
+}

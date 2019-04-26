@@ -1,0 +1,36 @@
+{
+  "coc.preferences.hoverTarget": "echo",
+  "coc.preferences.codeLens.enable": true,
+  "coc.preferences.diagnostic.virtualText": true,
+  "languageserver": {
+    "efm": {
+      /* go get github.com/mattn/efm-langserver/cmd/efm-langserver */
+      "command": "efm-langserver",
+      "filetypes": ["markdown"]
+    },
+    "go": {
+      "command": "bingo -trace -logfile /tmp/bingo.log",
+      "filetypes": ["go"],
+      "trace.server": "verbose",
+      "rootPatterns": ["go.mod", ".git/"],
+      "initializationOptions": {
+        "enhanceSignatureHelp": true
+      }
+    },
+    "ccls": {
+      "command": "ccls",
+      "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
+      "rootPatterns": [".ccls", "compile_commands.json", ".vim/", ".git/", ".hg/"],
+      "initializationOptions": {
+        "cacheDirectory": "/tmp/ccls"
+      }
+    },
+    "bash": {
+      "command": "bash-language-server",
+      "filetypes": ["sh"],
+      "args": ["start"],
+      "ignoredRootPaths": ["~"]
+    }
+  }
+}
+

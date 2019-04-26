@@ -1,0 +1,18 @@
+[
+  { "source": "ackrc", "dst": "~/.ackrc" },
+  { "source": "alacritty.yml", "dst": "~/.config/alacritty/alacritty.yml" },
+  { "source": "bash_aliases", "dst": "~/.bash_aliases" },
+  { "source": "bin", "dst": "~/bin" },
+  { "source": "ctags", "dst": "~/.ctags" },
+  { "source": "dev_requirements.txt", "dst": "~/.dev_requirements.txt" },
+  { "source": "gitconfig", "dst": "~/.gitconfig" },
+  { "source": "go_install.sh", "dst": "~/.go_install.sh" },
+  { "source": "iterm", "dst": "~/.iterm" },
+  { "source": "psqlrc", "dst": "~/.psqlrc" },
+  { "source": "psqlrc_alias", "dst": "~/.psqlrc_alias" },
+  { "source": "ssh", "dst": "~/.ssh" },
+  { "source": "tmux.conf", "dst": "~/.tmux.conf" },
+  { "source": "vim", "dst": "~/.vim" },
+  { "source": "vim", "dst": "~/.config/nvim/" },
+  { "source": "zshrc", "dst": "~/.zshrc" }
+]

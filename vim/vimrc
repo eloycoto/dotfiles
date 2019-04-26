@@ -11,11 +11,12 @@ Plug 'neomake/neomake'
 Plug 'marcweber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
 Plug 'flazz/vim-colorschemes'
-Plug 'Valloric/YouCompleteMe'
 Plug 'junegunn/vim-easy-align'
 Plug 'sirtaj/vim-openscad'
 Plug 'mileszs/ack.vim'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
 Plug 'tomasiser/vim-code-dark'
+" Plug 'inkarkat/vim-mark'
 call plug#end()
 
 set nocompatible
@@ -58,7 +59,6 @@ set nowb
 set t_Co=256
 set t_ut=
 colorscheme codedark
-
 " Move codeblocks
 vnoremap < <gv
 vnoremap > >gv
@@ -172,7 +172,7 @@ let g:go_fmt_command = "goimports"
 let g:go_highlight_functions = 0
 let g:go_highlight_methods = 0
 let g:go_highlight_types = 0
-let g:go_metalinter_autosave = 1
+let g:go_metalinter_autosave = 0
 let g:go_def_mapping_enabled = 0
 let g:go_fmt_fail_silently = 1
 let g:go_term_enabled = 1
@@ -273,3 +273,19 @@ noremap <Right> <Nop>
 nnoremap <leader>z <C-W><C-\|><C-W><C-_>
 " Restore panes
 nnoremap <leader>= <C-w><C-=>
+
+let g:LanguageClient_autoStart = 1
+let g:LanguageClient_diagnosticsEnable = 1
+let g:LanguageClient_rootMarkers = {
+        \ 'go': ['.git', 'go.mod'],
+        \ }
+
+let g:LanguageClient_serverCommands = {
+    \ 'go': ['bingo', '--mode', 'stdio', '--logfile', '/tmp/lspserver.log','--trace', '--pprof', ':6060'],
+    \ }
+
+
+nmap <silent> cgd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)

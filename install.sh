@@ -9,6 +9,7 @@ ZSHRC=1
 
 rm -rf $HOME/.vim
 cp -Rv $DIR/vim/ $HOME/.vim/
+cp -Rv $DIR/vim/ $HOME/.config/nvim
 ln -sf  $HOME/.vim/vimrc $HOME/.vimrc
 cp -Rfv bin ~/bin
 cp -rfv ackrc ~/.ackrc

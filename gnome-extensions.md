@@ -1,0 +1,13 @@
+alternate-tab@gnome-shell-extensions.gcampax.github.com
+apps-menu@gnome-shell-extensions.gcampax.github.com
+dash-to-dock@micxgx.gmail.com
+donotdisturb-button@nls1729
+EasyScreenCast@iacopodeenosee.gmail.com
+launch-new-instance@gnome-shell-extensions.gcampax.github.com
+no-title-bar@franglais125.gmail.com
+places-menu@gnome-shell-extensions.gcampax.github.com
+sound-output-device-chooser@kgshank.net
+system-monitor@paradoxxx.zero.gmail.com
+topicons-redux@pop-planet.info
+user-theme@gnome-shell-extensions.gcampax.github.com
+window-list@gnome-shell-extensions.gcampax.github.com
