@@ -1,0 +1,272 @@
+call plug#begin('~/.vim/plugged')
+
+Plug 'fatih/vim-go'
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
+Plug 'ctrlpvim/ctrlp.vim'
+Plug 'majutsushi/tagbar'
+Plug 'tpope/vim-commentary'
+Plug 'airblade/vim-gitgutter'
+Plug 'neomake/neomake'
+Plug 'marcweber/vim-addon-mw-utils'
+Plug 'tomtom/tlib_vim'
+Plug 'flazz/vim-colorschemes'
+Plug 'junegunn/vim-easy-align'
+Plug 'sirtaj/vim-openscad'
+Plug 'mileszs/ack.vim'
+Plug 'tomasiser/vim-code-dark'
+Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+call plug#end()
+
+set nocompatible
+syntax on
+let $VIMHOME = $HOME."/.vim"
+
+filetype on
+filetype plugin on
+
+set vb t_vb=
+
+let mapleader=','
+
+""Normal set
+set cursorline
+set showmode
+set history=1000
+set undolevels=100
+set ruler
+set ic
+set splitbelow
+set splitright
+set laststatus=2
+
+" Keep 3 lines after/before the cursor
+set so=3
+
+" active mouse on terminal
+set mouse=a
+
+" Turn off swap files
+set noswapfile
+set nobackup
+set nowb
+
+""foldmethod
+" set nofoldenable
+" set foldmethod=manual
+" ColorScheme
+set t_Co=256
+set t_ut=
+colorscheme codedark
+
+" Move codeblocks
+vnoremap < <gv
+vnoremap > >gv
+
+" codeblocks up/down
+vnoremap J :m '>+1<CR>gv=gv
+vnoremap K :m '<-2<CR>gv=gv
+
+" Some useful quickfix shortcuts for quickfix
+map <C-n> :cn<CR>
+map <C-m> :cp<CR>
+nnoremap <leader>a :cclose<CR>
+
+" Better copy&paste
+set clipboard=unnamed
+
+"Backspace fix in mac
+set backspace=start,eol,indent
+
+if has("gui_running")
+    imap <C-v> <ESC>"+pa
+    nmap <C-v> <ESC>"+pa
+    cnoremap <C-v> <ESC>"+pa
+endif
+
+"Ctrl-P
+let g:ctrlp_map = '<c-p>'
+let g:ctrlp_working_path_mode = 'ra'
+let g:ctrlp_switch_buffer = 'et'  " jump to a file if it's open already
+let g:ctrlp_mruf_max=450    " number of recently opened files
+let g:ctrlp_max_files=0     " do not limit the number of searchable files
+let g:ctrlp_use_caching = 1
+let g:ctrlp_clear_cache_on_exit = 0
+let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
+let g:ctrlp_match_window = 'bottom,order:btt,max:10,results:10'
+let g:ctrlp_buftag_types = {'go' : '--language-force=go --golang-types=ftv'}
+
+"Colorscheme changes
+autocmd ColorScheme * hi Visual term=reverse cterm=reverse ctermfg=10 ctermbg=8 guibg=DarkGrey
+autocmd ColorScheme * hi SpellBad ctermfg=160 ctermbg=8
+
+if has("patch-7.4.710")
+    set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
+endif
+
+"setlocal colorcolumn=81
+" match ColorColumn '\%>80v.\+'
+" autocmd ColorScheme *.go,*py,*.c hi ColorColumn ctermbg=241
+let &colorcolumn=join(range(100,999),",")
+
+highlight ColorColumn ctermbg=234
+
+set expandtab
+au BufWinEnter * set autoindent|set ts=4|set sw=4
+au BufWinEnter *.html,*.js,*.css,*.scss,*.scala,*.yml,*yaml,*.less,*.lua set ts=2|set sw=2
+au BufWinEnter *.scss set filetype=css
+
+
+""Number
+set number
+map <silent><F2> :set invnumber<CR>
+
+"Shortcuts
+noremap % v%
+map <Leader>z u<CR>
+map <Leader><Leader> $<CR>
+""Sort lines
+vmap <leader>s :sort u<CR>
+
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> dg <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)map <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)omplete functions
+
+
+autocmd BufRead,BufNewFile *.md setlocal textwidth=80
+autocmd BufRead,BufNewFile *.rst setlocal textwidth=80
+
+
+set guitablabel=%M%t
+map <silent><C-m> :tabnext<CR>
+map <silent><C-k> :tabnext<CR>
+map <silent><C-n> :tabprevious<CR>
+map <silent><C-j> :tabprevious<CR>
+map <silent><C-t> :tabnew<CR>
+
+let g:airline#extensions#syntastic#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#virtualenv#enabled = 1
+
+let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+
+""Python
+""let g:pymode = 1
+let g:pymode_doc = 1
+let g:pymode_doc_key = 'K'
+let g:pymode_folding = 0
+
+"""Golang
+let g:go_auto_sameids = 0
+let g:go_auto_type_info = 0
+let g:go_fmt_command = "goimports"
+let g:go_highlight_functions = 0
+let g:go_highlight_methods = 0
+let g:go_highlight_types = 0
+let g:go_metalinter_autosave = 1
+let g:go_def_mapping_enabled = 0
+let g:go_fmt_fail_silently = 1
+let g:go_term_enabled = 1
+let g:go_autodetect_gopath = 1
+
+augroup go
+	autocmd!
+
+	autocmd FileType go nmap <silent> <Leader>v <Plug>(go-def-vertical)
+	autocmd FileType go nmap <silent> <Leader>s <Plug>(go-def-split)
+	autocmd FileType go nmap <silent> <Leader>d <Plug>(go-def-tab)
+
+	autocmd FileType go nmap <silent> <Leader>x <Plug>(go-doc-vertical)
+
+	autocmd FileType go nmap <silent> <Leader>i <Plug>(go-info)
+	autocmd FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
+
+    nnoremap <leader>b oruntime.Breakpoint()<Esc>
+augroup END
+
+
+""" NeoMake
+autocmd BufWritePost * Neomake
+let g:neomake_error_sign   = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
+let g:neomake_warning_sign = {'text': '∆', 'texthl': 'NeomakeWarningSign'}
+let g:neomake_message_sign = {'text': '➤', 'texthl': 'NeomakeMessageSign'}
+let g:neomake_info_sign    = {'text': 'ℹ', 'texthl': 'NeomakeInfoSign'}
+let g:neomake_go_enabled_makers = [ 'go', 'gometalinter' ]
+let g:neomake_go_gometalinter_maker = {
+  \ 'args': [
+  \   '--tests',
+  \   '--enable-gc',
+  \   '--concurrency=3',
+  \   '--fast',
+  \   '-D', 'aligncheck',
+  \   '-D', 'dupl',
+  \   '-D', 'gocyclo',
+  \   '-D', 'gotype',
+  \   '-E', 'errcheck',
+  \   '-E', 'misspell',
+  \   '-E', 'unused',
+  \   '%:p:h',
+  \ ],
+  \ 'append_file': 0,
+  \ 'errorformat':
+  \   '%E%f:%l:%c:%trror: %m,' .
+  \   '%W%f:%l:%c:%tarning: %m,' .
+  \   '%E%f:%l::%trror: %m,' .
+  \   '%W%f:%l::%tarning: %m'
+  \ }
+
+""" Commentary
+xmap <Leader>c <Plug>Commentary
+
+augroup plugin_commentary
+    au!
+    au FileType python setlocal commentstring=#%s
+    au FileType yml setlocal commentstring=#%s
+    au FileType htmldjango setlocal commentstring={#\ %s\ #}
+    au FileType puppet setlocal commentstring=#\ %s
+augroup END
+
+map <silent><C-r> :NERDTreeToggle <CR>
+vmap <silent><C-r> :NERDTreeToggle <CR>
+
+" Delete trailing spaces
+" autocmd BufWritePre * :%s/\s\+$//e
+
+let g:indentLine_color_term = 239
+
+function! SendToJq(jqFilter) range
+    let saved_register = @*
+    normal! `<v`>y
+    new
+    normal! P
+    let @* = saved_register
+    silent exec ':%! jq -r ''' . a:jqFilter . ''''
+endfunction
+
+function! CreateTableUsingJQ(jqFilter) range
+    silent call SendToJq(a:jqFilter)
+    silent exec ':%EasyAlign *\ '
+    silent exec ':%s/''//g'
+endfunction
+
+vnoremap PS :call SendToJq(".")<CR>
+
+command! -nargs=* -range PodStatus call CreateTableUsingJQ('.items[] | [(.metadata.namespace+":"+.metadata.name), (.spec.containers | length), (.status.podIP), .spec.nodeName] | @sh')<CR>
+command! -nargs=* -range JQ call SendToJq('.')
+
+
+noremap <Up> <Nop>
+noremap <Down> <Nop>
+noremap <Left> <Nop>
+noremap <Right> <Nop>
+
+" Zoom one pane
+nnoremap <leader>z <C-W><C-\|><C-W><C-_>
+" Restore panes
+nnoremap <leader>= <C-w><C-=>
