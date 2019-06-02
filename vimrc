@@ -40,6 +40,12 @@ set splitbelow
 set splitright
 set laststatus=2
 
+set hidden
+set cmdheight=2
+set updatetime=300
+set shortmess+=c
+set signcolumn=yes
+
 " Keep 3 lines after/before the cursor
 set so=3
 
@@ -73,7 +79,8 @@ map <C-m> :cp<CR>
 nnoremap <leader>a :cclose<CR>
 
 " Better copy&paste
-set clipboard=unnamed
+" set clipboard=unnamed
+set clipboard=unnamedplus
 
 "Backspace fix in mac
 set backspace=start,eol,indent
