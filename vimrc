@@ -14,7 +14,7 @@ Plug 'flazz/vim-colorschemes'
 Plug 'junegunn/vim-easy-align'
 Plug 'sirtaj/vim-openscad'
 Plug 'mileszs/ack.vim'
-Plug 'tomasiser/vim-code-dark'
+Plug 'arcticicestudio/nord-vim'
 Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 call plug#end()
 
@@ -63,7 +63,7 @@ set nowb
 " ColorScheme
 set t_Co=256
 set t_ut=
-colorscheme codedark
+colorscheme nord
 
 " Move codeblocks
 vnoremap < <gv
@@ -103,20 +103,12 @@ let g:ctrlp_cache_dir = $HOME.'/.cache/ctrlp'
 let g:ctrlp_match_window = 'bottom,order:btt,max:10,results:10'
 let g:ctrlp_buftag_types = {'go' : '--language-force=go --golang-types=ftv'}
 
-"Colorscheme changes
-autocmd ColorScheme * hi Visual term=reverse cterm=reverse ctermfg=10 ctermbg=8 guibg=DarkGrey
-autocmd ColorScheme * hi SpellBad ctermfg=160 ctermbg=8
 
 if has("patch-7.4.710")
     set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
 endif
 
-"setlocal colorcolumn=81
-" match ColorColumn '\%>80v.\+'
-" autocmd ColorScheme *.go,*py,*.c hi ColorColumn ctermbg=241
-let &colorcolumn=join(range(100,999),",")
-
-highlight ColorColumn ctermbg=234
+set colorcolumn=80,120
 
 set expandtab
 au BufWinEnter * set autoindent|set ts=4|set sw=4
