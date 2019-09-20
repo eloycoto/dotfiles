@@ -18,6 +18,13 @@
     uncommit = reset --mixed HEAD~
     pr = !"pr() { git fetch origin pull/$1/head:pr-$1; git checkout pr-$1; }; pr"
 
+    review = !nvim -p $(git files) +\"tabdo Gdiff $REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$REVIEW_BASE'\"
+    files = !git diff --name-only $(git merge-base HEAD \"$REVIEW_BASE\")
+
+    # Same as above, but with a diff stat instead of just names
+    # (better for interactive use)
+    stat = !git diff --stat $(git merge-base HEAD \"$REVIEW_BASE\")
+
 [push]
     default = matching
 
