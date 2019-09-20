@@ -110,10 +110,25 @@ endif
 
 set colorcolumn=80,120
 
+function! s:SetCompoundFiletype()
+    if match(&filetype, 'RHdev') >= 0
+        return
+    endif
+
+    if match(&filetype, '\v<markdown|go>') >= 0
+        return
+    endif
+
+    noautocmd set filetype+=.RHdev
+    noautocmd filetype detect
+endfunction
+
+autocmd FileType * call s:SetCompoundFiletype()
+autocmd FileType *RHdev set tabstop=2 shiftwidth=2
+autocmd BufEnter * if match(&ft,'RHdev') >= 0 | doautoall FileType | endif
+
 set expandtab
 au BufWinEnter * set autoindent|set ts=4|set sw=4
-au BufWinEnter *.html,*.js,*.css,*.scss,*.scala,*.yml,*yaml,*.less,*.lua set ts=2|set sw=2
-au BufWinEnter *.scss set filetype=css
 
 
 ""Number
