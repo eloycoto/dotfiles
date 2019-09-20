@@ -17,6 +17,7 @@ Plug 'sirtaj/vim-openscad'
 Plug 'mileszs/ack.vim'
 Plug 'arcticicestudio/nord-vim'
 Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
+Plug 'Yggdroot/indentLine'
 call plug#end()
 
 set nocompatible
@@ -106,22 +107,22 @@ let g:ctrlp_buftag_types = {'go' : '--language-force=go --golang-types=ftv'}
 
 
 if has("patch-7.4.710")
-    set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
+  set listchars=eol:¬,tab:>·,trail:~,extends:>,precedes:<,space:␣
 endif
 
 set colorcolumn=80,120
 
 function! s:SetCompoundFiletype()
-    if match(&filetype, 'RHdev') >= 0
-        return
-    endif
+  if match(&filetype, 'RHdev') >= 0
+    return
+  endif
 
-    if match(&filetype, '\v<markdown|go>') >= 0
-        return
-    endif
+  if match(&filetype, '\v<markdown|go>') >= 0
+    return
+  endif
 
-    noautocmd set filetype+=.RHdev
-    noautocmd filetype detect
+  noautocmd set filetype+=.RHdev
+  noautocmd filetype detect
 endfunction
 
 autocmd FileType * call s:SetCompoundFiletype()
@@ -202,7 +203,7 @@ augroup go
 	autocmd FileType go nmap <silent> <Leader>i <Plug>(go-info)
 	autocmd FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
 
-    nnoremap <leader>b oruntime.Breakpoint()<Esc>
+  nnoremap <leader>b oruntime.Breakpoint()<Esc>
 augroup END
 
 
