@@ -163,3 +163,7 @@ alias do_cleanup_exited="docker rm $(docker ps -a --filter='status=exited' -q)"
 function jqr(){
     jq -r $1 | column -t
 }
+
+function yubikey_refresh_gpg(){
+  gpg-connect-agent "scd serialno" "learn --force" /bye
+}
