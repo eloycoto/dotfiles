@@ -1,0 +1,35 @@
+[user]
+    email = eloy.coto@gmail.com
+    name = Eloy Coto
+
+[alias]
+    cm = commit -am
+    st = status
+    co = checkout
+    amend = commit --amend -s
+    commit = commit -s
+
+    branches = branch -a
+    tags = tag
+    stashes = stash list
+
+    unstage = reset -q HEAD --
+    discard = checkout --
+    uncommit = reset --mixed HEAD~
+    pr = !"pr() { git fetch origin pull/$1/head:pr-$1; git checkout pr-$1; }; pr"
+
+    review = !nvim -p $(git files) +\"tabdo Gdiff $REVIEW_BASE\" +\"let g:gitgutter_diff_base = '$REVIEW_BASE'\"
+    files = !git diff --name-only $(git merge-base HEAD \"$REVIEW_BASE\")
+
+    # Same as above, but with a diff stat instead of just names
+    # (better for interactive use)
+    stat = !git diff --stat $(git merge-base HEAD \"$REVIEW_BASE\")
+
+[push]
+    default = matching
+
+[rebase]
+  autoStash = true
+
+[commit]
+    gpgsign = true
