@@ -30,8 +30,25 @@ chezmoi: install_chezmoi
 install: ## Install
 	$(CHEZMOI) apply
 
+install_deps: ## install dependencies like oh-my-zsh
+install_deps: install_oh_my_zsh
+install_deps: install_tpm
+
+install_oh_my_zsh:
+	@echo "Install oh_my_zsh"
+	$(Q) curl -s -L -o oh-my-zsh-master.tar.gz https://github.com/robbyrussell/oh-my-zsh/archive/master.tar.gz
+	$(CHEZMOI) import --strip-components 1 --destination ${HOME}/.oh-my-zsh oh-my-zsh-master.tar.gz
+	$(Q) rm -rfv oh-my-zsh-master.tar.gz
+
+install_tpm:
+	@echo "Install tpm"
+	$(Q) curl -s -L -o tpm.tar.gz https://github.com/tmux-plugins/tpm/archive/master.tar.gz
+	$(CHEZMOI) import --strip-components 1 --destination  ${HOME}/.tmux/plugins/tpm/ tpm.tar.gz
+	$(Q) rm -rfv tpm.tar.gz
+
 clean: ## clean
-	rm -r chezmoi
+	rm -r $(CHEZMOI_BIN)
+	rm -r *.tar.gz~
 
 # Check http://marmelab.com/blog/2016/02/29/auto-documented-makefile.html
 help: ## Print this help
