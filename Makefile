@@ -28,19 +28,35 @@ chezmoi: install_chezmoi
 	$(CHEZMOI) $(RUN_ARGS)
 
 install: ## Install
+	@echo "Installing dotfiles"
 	$(CHEZMOI) apply
 
-install_deps: ## install dependencies like oh-my-zsh
-install_deps: install_oh_my_zsh
-install_deps: install_tpm
+install_full: ## install complete
+install_full: install install_all_plugins
 
-install_oh_my_zsh:
+
+update_deps: ## update dependencies like oh-my-zsh
+update_deps: update_oh_my_zsh
+update_deps: update_tpm
+update_deps: install_full
+
+install_all_plugins: ## install all plugins for vim/tmux
+	@echo "Installing all plugins"
+	@echo "VIM plugins"
+	nvim +'PlugInstall --sync' +qa
+	nvim +'GoInstallBinaries' +qa
+
+	@echo "TMUX plugins"
+	~/.tmux/plugins/tpm/scripts/install_plugins.sh || exit 0
+	@echo "Finish"
+
+update_oh_my_zsh:
 	@echo "Install oh_my_zsh"
 	$(Q) curl -s -L -o oh-my-zsh-master.tar.gz https://github.com/robbyrussell/oh-my-zsh/archive/master.tar.gz
 	$(CHEZMOI) import --strip-components 1 --destination ${HOME}/.oh-my-zsh oh-my-zsh-master.tar.gz
 	$(Q) rm -rfv oh-my-zsh-master.tar.gz
 
-install_tpm:
+update_tpm:
 	@echo "Install tpm"
 	$(Q) curl -s -L -o tpm.tar.gz https://github.com/tmux-plugins/tpm/archive/master.tar.gz
 	$(CHEZMOI) import --strip-components 1 --destination  ${HOME}/.tmux/plugins/tpm/ tpm.tar.gz
