@@ -217,6 +217,9 @@ augroup go
 augroup END
 
 
+""" Rust
+let g:rustfmt_autosave = 1
+
 """ NeoMake
 autocmd BufWritePost * Neomake
 let g:neomake_error_sign   = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
