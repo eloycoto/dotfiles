@@ -1,0 +1,31 @@
+{
+  "languageserver": {
+    "golang": {
+      "command": "gopls",
+      "rootPatterns": [
+        "go.mod",
+        ".vim/",
+        ".git/",
+        ".hg/"
+      ],
+      "filetypes": [
+        "go"
+      ]
+    },
+    "lua": {
+      "command": "java",
+      "args": [
+        "-cp",
+        "/home/eloy/dev/EmmyLua-LanguageServer/EmmyLua-LS/build/libs/EmmyLua-LS-all.jar",
+        "com.tang.vscode.MainKt"
+      ],
+      "filetypes": [
+        "lua"
+      ]
+    }
+  },
+  "html.format.enable": true,
+  "html.enable": true,
+  "coc.preferences.colorSupport": true,
+  "coc.preferences.extensionUpdateCheck": "never"
+}
