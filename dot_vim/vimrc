@@ -11,7 +11,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'neomake/neomake'
 Plug 'marcweber/vim-addon-mw-utils'
 Plug 'tomtom/tlib_vim'
-Plug 'flazz/vim-colorschemes'
 Plug 'junegunn/vim-easy-align'
 Plug 'sirtaj/vim-openscad'
 Plug 'mileszs/ack.vim'
@@ -19,6 +18,7 @@ Plug 'arcticicestudio/nord-vim'
 Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
 Plug 'Yggdroot/indentLine'
 Plug 'rust-lang/rust.vim'
+Plug 'kristijanhusak/vim-carbon-now-sh'
 call plug#end()
 
 set nocompatible
