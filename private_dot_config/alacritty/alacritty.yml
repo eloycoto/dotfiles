@@ -19,18 +19,18 @@ window:
 # Font configuration (changes require restart)
 font:
   normal:
-     family: hack
+     family: Jetbrains Mono
      style: regular
 
   bold:
-     family: hack
+     family: Jetbrains Mono
      style: bold
 
   italic:
-    family: hack
+    family: Jetbrains Mono
     style: italic
 
-    size: 20
+    size: 13
 
   offset:
     x: 0
