@@ -22,6 +22,11 @@
       "filetypes": [
         "lua"
       ]
+    },
+    "rust": {
+      "command": "rust-analyzer",
+      "filetypes": ["rust"],
+      "rootPatterns": ["Cargo.toml"]
     }
   },
   "html.format.enable": true,
