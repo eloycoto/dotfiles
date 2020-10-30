@@ -3,6 +3,8 @@
 #   WINIT_HIDPI_FACTOR: 1.0
 
 window:
+  dynamic_title: true
+
   dimensions:
     columns: 160
     lines: 48
@@ -72,7 +74,7 @@ colors:
     cyan: '0x8FBCBB'
     white: '0xECEFF4'
 
-visual_bell:
+bell:
   animation: EaseOutExpo
   duration: 0
 
@@ -93,7 +95,7 @@ mouse:
 selection:
   semantic_escape_chars: ",│`|:\"' ()[]{}<>"
 
-dynamic_title: true
+
 
 live_config_reload: true
 
