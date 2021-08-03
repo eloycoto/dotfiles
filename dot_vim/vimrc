@@ -1,24 +1,28 @@
+
 call plug#begin('~/.vim/plugged')
 
-Plug 'fatih/vim-go'
+if has("nvim")
+  Plug 'nvim-lua/popup.nvim'
+  Plug 'nvim-lua/plenary.nvim'
+  Plug 'nvim-telescope/telescope.nvim'
+  Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}  " We recommend updating the parsers on update
+  Plug 'lewis6991/gitsigns.nvim'
+  Plug 'neovim/nvim-lspconfig'
+  Plug 'nvim-lua/completion-nvim'
+endif
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'majutsushi/tagbar'
 Plug 'tpope/vim-commentary'
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-Plug 'neomake/neomake'
-Plug 'marcweber/vim-addon-mw-utils'
-Plug 'tomtom/tlib_vim'
-Plug 'junegunn/vim-easy-align'
+" Plug 'airblade/vim-gitgutter'
+" Plug 'tpope/vim-fugitive'
 Plug 'sirtaj/vim-openscad'
-Plug 'mileszs/ack.vim'
 Plug 'arcticicestudio/nord-vim'
-Plug 'neoclide/coc.nvim', {'do': { -> coc#util#install()}}
-Plug 'Yggdroot/indentLine'
-Plug 'rust-lang/rust.vim'
-Plug 'kristijanhusak/vim-carbon-now-sh'
+" Plug 'rust-lang/rust.vim'
+Plug 'ryanoasis/vim-devicons'
+
 call plug#end()
 
 set nocompatible
@@ -27,11 +31,17 @@ let $VIMHOME = $HOME."/.vim"
 
 filetype on
 filetype plugin on
+set completeopt=menuone,noinsert,noselect
 
 set vb t_vb=
 
 let mapleader=','
 
+" if (has("termguicolors"))
+"   let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+" 	let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+"   set termguicolors
+" endif
 ""Normal set
 set cursorline
 set showmode
@@ -60,13 +70,8 @@ set noswapfile
 set nobackup
 set nowb
 
-""foldmethod
-" set nofoldenable
-" set foldmethod=manual
-" ColorScheme
-set t_Co=256
-set t_ut=
 colorscheme nord
+highlight Comment ctermfg=14
 
 " Move codeblocks
 vnoremap < <gv
@@ -116,24 +121,6 @@ endif
 
 set colorcolumn=80,120
 
-" function! s:SetCompoundFiletype()
-"   if match(&filetype, 'RHdev') >= 0
-"     return
-"   endif
-
-"   if match(&filetype, '\v<markdown|go>') >= 0
-"     return
-"   endif
-
-"   noautocmd set filetype+=.RHdev
-"   noautocmd filetype detect
-" endfunction
-
-" autocmd FileType * call s:SetCompoundFiletype()
-" autocmd FileType *RHdev set tabstop=2 shiftwidth=2
-" autocmd BufEnter * if match(&ft,'RHdev') >= 0 | doautoall FileType | endif
-"
-
 set expandtab
 au BufWinEnter * set autoindent|set ts=2|set sw=2
 
@@ -148,15 +135,6 @@ map <Leader>z u<CR>
 map <Leader><Leader> $<CR>
 ""Sort lines
 vmap <leader>s :sort u<CR>
-
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> dg <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)map <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)omplete functions
 
 
 autocmd BufRead,BufNewFile *.md setlocal textwidth=80
@@ -173,14 +151,14 @@ map <silent><C-t> :tabnew<CR>
 let g:airline#extensions#syntastic#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#virtualenv#enabled = 1
-     
 
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
-13123
-123123
-12313
-12312312
+
+augroup nord-overrides
+  autocmd!
+
+augroup END
 
 ""Python
 ""let g:pymode = 1
@@ -195,77 +173,19 @@ let g:go_fmt_command = "goimports"
 let g:go_highlight_functions = 0
 let g:go_highlight_methods = 0
 let g:go_highlight_types = 0
-let g:go_metalinter_autosave = 1
-let g:go_def_mapping_enabled = 0
+let g:go_def_mapping_enabled = 1
 let g:go_fmt_fail_silently = 1
 let g:go_term_enabled = 1
 let g:go_autodetect_gopath = 1
-
-augroup go
-	autocmd!
-
-	autocmd FileType go nmap <silent> <Leader>v <Plug>(go-def-vertical)
-	autocmd FileType go nmap <silent> <Leader>s <Plug>(go-def-split)
-	autocmd FileType go nmap <silent> <Leader>d <Plug>(go-def-tab)
-
-	autocmd FileType go nmap <silent> <Leader>x <Plug>(go-doc-vertical)
-
-	autocmd FileType go nmap <silent> <Leader>i <Plug>(go-info)
-	autocmd FileType go nmap <silent> <Leader>l <Plug>(go-metalinter)
-
-  nnoremap <leader>b oruntime.Breakpoint()<Esc>
-augroup END
 
 
 """ Rust
 let g:rustfmt_autosave = 1
 
-""" NeoMake
-autocmd BufWritePost * Neomake
-let g:neomake_error_sign   = {'text': '✖', 'texthl': 'NeomakeErrorSign'}
-let g:neomake_warning_sign = {'text': '∆', 'texthl': 'NeomakeWarningSign'}
-let g:neomake_message_sign = {'text': '➤', 'texthl': 'NeomakeMessageSign'}
-let g:neomake_info_sign    = {'text': 'ℹ', 'texthl': 'NeomakeInfoSign'}
-let g:neomake_go_enabled_makers = [ 'go', 'gometalinter' ]
-let g:neomake_go_gometalinter_maker = {
-  \ 'args': [
-  \   '--tests',
-  \   '--enable-gc',
-  \   '--concurrency=3',
-  \   '--fast',
-  \   '-D', 'aligncheck',
-  \   '-D', 'dupl',
-  \   '-D', 'gocyclo',
-  \   '-D', 'gotype',
-  \   '-E', 'errcheck',
-  \   '-E', 'misspell',
-  \   '-E', 'unused',
-  \   '%:p:h',
-  \ ],
-  \ 'append_file': 0,
-  \ 'errorformat':
-  \   '%E%f:%l:%c:%trror: %m,' .
-  \   '%W%f:%l:%c:%tarning: %m,' .
-  \   '%E%f:%l::%trror: %m,' .
-  \   '%W%f:%l::%tarning: %m'
-  \ }
 
 """ Commentary
 xmap <Leader>c <Plug>Commentary
 
-augroup plugin_commentary
-    au!
-    au FileType python setlocal commentstring=#%s
-    au FileType yml setlocal commentstring=#%s
-    au FileType htmldjango setlocal commentstring={#\ %s\ #}
-    au FileType puppet setlocal commentstring=#\ %s
-augroup END
-
-map <silent><C-r> :NERDTreeToggle <CR>
-vmap <silent><C-r> :NERDTreeToggle <CR>
-
-" Delete trailing spaces
-" autocmd BufWritePre * :%s/\s\+$//e
 
 let g:indentLine_color_term = 239
 
@@ -300,6 +220,83 @@ nnoremap <leader>z <C-W><C-\|><C-W><C-_>
 " Restore panes
 nnoremap <leader>= <C-w><C-=>
 
+function! Note()
+  :new
+  :resize 10
+endfunction
+
+nnoremap <leader>x :call Note()<CR>
 
 autocmd Filetype c setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
 autocmd Filetype lua setlocal expandtab tabstop=2 shiftwidth=2 softtabstop=2
+
+
+if has("nvim")
+  nnoremap <leader>ff <cmd>lua require('telescope.builtin').find_files()<cr>
+  nnoremap <leader>fg <cmd>lua require('telescope.builtin').live_grep()<cr>
+  nnoremap <leader>fb <cmd>lua require('telescope.builtin').buffers()<cr>
+  nnoremap <leader>fh <cmd>lua require('telescope.builtin').help_tags()<cr>
+
+lua << EOF
+
+  --[[
+  -- Notes:
+  --
+  -- When updating TreeSitter, you'll want to update the parsers using
+  -- :TSUpdate manually. Or, you can call :TSInstall to install new parsers.
+  -- Run :checkhealth nvim_treesitter to see what parsers are setup.
+  --]]
+  ----------
+  local nvim_lsp = require('lspconfig')
+  local completion = require('completion')
+  -- Use an on_attach function to only map the following keys
+  -- after the language server attaches to the current buffer
+  local on_attach = function(client, bufnr)
+    local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
+    local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
+
+    -- Mappings.
+    local opts = { noremap=true, silent=true }
+
+    -- See `:help vim.lsp.*` for documentation on any of the below functions
+    buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
+    buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+    buf_set_keymap('n', 'K', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
+    buf_set_keymap('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
+    buf_set_keymap('n', '<space>wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
+    buf_set_keymap('n', '<space>wr', '<cmd>lua vim.lsp.buf.remove_workspace_folder()<CR>', opts)
+    buf_set_keymap('n', '<space>wl', '<cmd>lua print(vim.inspect(vim.lsp.buf.list_workspace_folders()))<CR>', opts)
+    buf_set_keymap('n', '<space>D', '<cmd>lua vim.lsp.buf.type_definition()<CR>', opts)
+    buf_set_keymap('n', '<space>rn', '<cmd>lua vim.lsp.buf.rename()<CR>', opts)
+    buf_set_keymap('n', '<space>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+    buf_set_keymap('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>', opts)
+    buf_set_keymap('n', '<space>e', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<CR>', opts)
+    buf_set_keymap('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<CR>', opts)
+    buf_set_keymap('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<CR>', opts)
+    buf_set_keymap('n', '<space>q', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>', opts)
+    buf_set_keymap("n", "<space>f", "<cmd>lua vim.lsp.buf.formatting()<CR>", opts)
+
+    completion.on_attach(client, bufnr)
+  end
+
+  -- Use a loop to conveniently call 'setup' on multiple servers and
+  -- map buffer local keybindings when the language server attaches
+  local servers = { "gopls" }
+  for _, lsp in ipairs(servers) do
+    nvim_lsp[lsp].setup { on_attach = on_attach }
+  end
+
+  ---------------------------------------------------------------------
+  -- Treesitter
+  ---------------------------------------------------------------------
+  require'nvim-treesitter.configs'.setup {
+    highlight = {
+      enable = true,
+    },
+  }
+
+  require('gitsigns').setup()
+EOF
+
+endif
