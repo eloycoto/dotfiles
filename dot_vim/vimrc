@@ -301,3 +301,6 @@ lua << EOF
 EOF
 
 endif
+
+autocmd BufWritePre *.go lua vim.lsp.buf.code_action()
+autocmd BufWritePre *.go lua vim.lsp.buf.formatting_sync(nil, 1000)
