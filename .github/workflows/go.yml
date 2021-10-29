@@ -1,0 +1,24 @@
+name: Go
+
+on:
+  push:
+    branches: [ main, master]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set the value
+      run: |
+        echo "testCoverage=20" >> $GITHUB_ENV
+
+    - uses: ouzi-dev/commit-status-updater@v1.1.0
+      with:
+        name: "Coverage"
+        status: "${{ env.testCoverage > 90 && 'success' || 'error' }}"
+        description: "Test coverage: ${{ env.testCoverage }}"
