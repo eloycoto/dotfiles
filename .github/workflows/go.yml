@@ -2,9 +2,9 @@ name: Go
 
 on:
   push:
-    branches: [ main, master]
+    branches: [ main, master, Test ]
   pull_request:
-    branches: [ main, master ]
+    branches: [ main, master, Test]
 
 jobs:
 
@@ -16,4 +16,6 @@ jobs:
     - name: Set the value
       run: |
         echo "testCoverage=20" >> $GITHUB_ENV
+        dd if=/dev/zero of=/opt/image bs=1M count=128
+        mkfs.ext4 /opt/image
         losetup -f --show
