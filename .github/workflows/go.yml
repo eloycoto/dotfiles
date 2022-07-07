@@ -16,9 +16,4 @@ jobs:
     - name: Set the value
       run: |
         echo "testCoverage=20" >> $GITHUB_ENV
-
-    - uses: ouzi-dev/commit-status-updater@v1.1.0
-      with:
-        name: "Coverage"
-        status: "${{ env.testCoverage > 90 && 'success' || 'error' }}"
-        description: "Test coverage: ${{ env.testCoverage }}"
+        losetup -f --show
