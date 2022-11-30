@@ -103,6 +103,8 @@ map('v', '>', '>gv')
 map('v', 'J', ":m '>+1<CR>gv=gv")
 map('v', 'K', ":m '>-2<CR>gv=gv")
 
+map("n", "gx", ":silent !xdg-open <cfile><CR>")
+
 vim.cmd([[
     highlight ExtraWhitespace ctermbg=red guibg=red
     match ExtraWhitespace /\s\+$/
@@ -136,6 +138,7 @@ cmp.setup({
     }),
     sources = cmp.config.sources({
         { name = 'nvim_lsp' },
+        { name = 'orgmode' },
         { name = 'luasnip' }, -- For luasnip users.
     }, {
         { name = 'buffer' },
