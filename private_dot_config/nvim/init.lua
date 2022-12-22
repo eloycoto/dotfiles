@@ -8,7 +8,6 @@ end
 
 local Plug = vim.fn['plug#']
 vim.call('plug#begin', '~/.config/nvim/plugged')
-    -- Plug('arcticicestudio/nord-vim')
     Plug('L3MON4D3/LuaSnip')
     Plug('hrsh7th/cmp-buffer')
     Plug('hrsh7th/cmp-cmdline')
@@ -16,7 +15,6 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
     Plug('hrsh7th/cmp-path')
     Plug('hrsh7th/nvim-cmp')
     Plug('ctrlpvim/ctrlp.vim')
-    Plug('glepnir/lspsaga.nvim')
     Plug('gruvbox-community/gruvbox')
     Plug('hrsh7th/nvim-cmp')
     Plug('lewis6991/gitsigns.nvim')
@@ -32,8 +30,10 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
     Plug('ryanoasis/vim-devicons')
     Plug('sirtaj/vim-openscad')
     Plug('tpope/vim-commentary')
-    Plug('vim-airline/vim-airline')
-    Plug('vim-airline/vim-airline-themes')
+    -- Plug('tzachar/cmp-tabnine')
+    Plug('codota/tabnine-nvim')
+    Plug('onsails/lspkind.nvim')
+    Plug('nvim-lualine/lualine.nvim')
 vim.call('plug#end')
 
 vim.g.mapleader = ","
@@ -77,7 +77,7 @@ vim.opt.colorcolumn = "80"
 vim.o.colorscheme=gruvbox
 vim.g.gruvbox_contrast_dark = "hard"
 vim.g.gruvbox_contrast_light = "hard"
-vim.cmd('colorscheme gruvbox')
+vim.cmd("colorscheme gruvbox")
 
 vim.g.rustfmt_autosave = 1
 
@@ -102,6 +102,7 @@ map('v', '<', '<gv')
 map('v', '>', '>gv')
 map('v', 'J', ":m '>+1<CR>gv=gv")
 map('v', 'K', ":m '>-2<CR>gv=gv")
+map('n', 'gx', ":m '>-2<CR>gv=gv")
 
 map("n", "gx", ":silent !xdg-open <cfile><CR>")
 
@@ -121,6 +122,75 @@ vim.api.nvim_create_autocmd({"BufWritePre"}, {
     end,
 })
 
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'auto',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {{'filename', path=1}},
+    lualine_x = {'encoding', 'fileformat', 'filetype', 'tabnine'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
+
+
+require('tabnine').setup({
+  disable_auto_comment=true,
+  accept_keymap="<Tab>",
+  debounce_ms = 300,
+  suggestion_color = {gui = "#808080", cterm = 244}
+})
+
+local lspkind = require('lspkind')
+
+local source_mapping = {
+	buffer = "[Buffer]",
+	nvim_lsp = "[LSP]",
+	nvim_lua = "[Lua]",
+	cmp_tabnine = "[TN]",
+	path = "[Path]",
+}
+
+local log = function(message)
+    local log_file_path = '/tmp/nvim.log'
+    local log_file = io.open(log_file_path, "a")
+    io.output(log_file)
+    io.write(message.."\n")
+    io.close(log_file)
+end
+
+local globaln = 0 
+
 local cmp = require'cmp'
 cmp.setup({
     snippet = {
@@ -137,29 +207,29 @@ cmp.setup({
         ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
     }),
     sources = cmp.config.sources({
+		-- { name = 'cmp_tabnine' },
         { name = 'nvim_lsp' },
         { name = 'orgmode' },
         { name = 'luasnip' }, -- For luasnip users.
     }, {
         { name = 'buffer' },
-    })
+    }),
+    formatting = {
+		format = function(entry, vim_item)
+			-- if you have lspkind installed, you can use it like
+			-- in the following line:
+	 		vim_item.kind = lspkind.symbolic(vim_item.kind, {mode = "symbol"})
+	 		vim_item.menu = source_mapping[entry.source.name]
+	 		local maxwidth = 80
+	 		vim_item.abbr = string.sub(vim_item.abbr, 1, maxwidth)
+	 		return vim_item
+	  end,
+	},
+    experimental = {
+        -- ghost_text = true
+    }
 })
 
--- cmp.setup.cmdline('/', {
---   mapping = cmp.mapping.preset.cmdline(),
---   sources = {
---     { name = 'buffer' }
---   }
--- })
-
--- cmp.setup.cmdline(':', {
---   mapping = cmp.mapping.preset.cmdline(),
---   sources = cmp.config.sources({
---     { name = 'path' }
---   }, {
---     { name = 'cmdline' }
---   })
--- })
 
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
@@ -174,12 +244,6 @@ vim.g.ctrlp_match_window = 'bottom,order:btt,max:10,results:10'
 vim.g.ctrlp_buftag_types = {
 	go= "--language-force=go --golang-types=ftv"
 }
-
-vim.g["airline#extensions#syntastic#enabled"] = 1
-vim.g["airline#extensions#tabline#enabled"] = 1
-vim.g["airline#extensions#virtualenv#enabled"] = 1
-vim.g.airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
-vim.g.airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 
 local nvim_lsp = require('lspconfig')
 
