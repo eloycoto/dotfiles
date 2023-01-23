@@ -6,37 +6,49 @@ function map(mode, lhs, rhs, opts)
     vim.api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
-local Plug = vim.fn['plug#']
-vim.call('plug#begin', '~/.config/nvim/plugged')
-    Plug('L3MON4D3/LuaSnip')
-    Plug('hrsh7th/cmp-buffer')
-    Plug('hrsh7th/cmp-cmdline')
-    Plug('hrsh7th/cmp-nvim-lsp')
-    Plug('hrsh7th/cmp-path')
-    Plug('hrsh7th/nvim-cmp')
-    Plug('ctrlpvim/ctrlp.vim')
-    Plug('gruvbox-community/gruvbox')
-    Plug('hrsh7th/nvim-cmp')
-    Plug('lewis6991/gitsigns.nvim')
-    -- Plug('majutsushi/tagbar')
-    Plug('liuchengxu/vista.vim')
-    Plug('neovim/nvim-lspconfig')
-    Plug('nvim-lua/plenary.nvim')
-    Plug('nvim-lua/popup.nvim')
-    Plug('nvim-orgmode/orgmode')
-    Plug('nvim-telescope/telescope.nvim')
-    Plug('nvim-treesitter/nvim-treesitter')
-    Plug('nvim-treesitter/nvim-treesitter')
-    Plug('rust-lang/rust.vim')
-    Plug('ryanoasis/vim-devicons')
-    Plug('sirtaj/vim-openscad')
-    Plug('tpope/vim-commentary')
-    -- Plug('tzachar/cmp-tabnine')
-    Plug('codota/tabnine-nvim')
-    Plug('onsails/lspkind.nvim')
-    Plug('nvim-lualine/lualine.nvim')
-    Plug('akinsho/org-bullets.nvim')
-vim.call('plug#end')
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+  vim.fn.system({
+    "git",
+    "clone",
+    "--filter=blob:none",
+    "https://github.com/folke/lazy.nvim.git",
+    "--branch=stable", -- latest stable release
+    lazypath,
+  })
+end
+vim.opt.rtp:prepend(lazypath)
+
+plugins = {
+    'hrsh7th/cmp-buffer',
+    'L3MON4D3/LuaSnip',
+    'hrsh7th/cmp-buffer',
+    'hrsh7th/cmp-cmdline',
+    'hrsh7th/cmp-nvim-lsp',
+    'hrsh7th/cmp-path',
+    'hrsh7th/nvim-cmp',
+    'ctrlpvim/ctrlp.vim',
+    'gruvbox-community/gruvbox',
+    'hrsh7th/nvim-cmp',
+    'lewis6991/gitsigns.nvim',
+    'liuchengxu/vista.vim',
+    'neovim/nvim-lspconfig',
+    'nvim-lua/plenary.nvim',
+    'nvim-lua/popup.nvim',
+    'nvim-orgmode/orgmode',
+    'nvim-telescope/telescope.nvim',
+    'nvim-treesitter/nvim-treesitter',
+    'nvim-treesitter/nvim-treesitter',
+    'rust-lang/rust.vim',
+    'ryanoasis/vim-devicons',
+    'sirtaj/vim-openscad',
+    'tpope/vim-commentary',
+    'codota/tabnine-nvim',
+    'onsails/lspkind.nvim',
+    'nvim-lualine/lualine.nvim',
+    'akinsho/org-bullets.nvim',
+}
+require("lazy").setup(plugins)
 
 vim.g.mapleader = ","
 vim.g.foldlevel = 2
