@@ -18,7 +18,8 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
     Plug('gruvbox-community/gruvbox')
     Plug('hrsh7th/nvim-cmp')
     Plug('lewis6991/gitsigns.nvim')
-    Plug('majutsushi/tagbar')
+    -- Plug('majutsushi/tagbar')
+    Plug('liuchengxu/vista.vim')
     Plug('neovim/nvim-lspconfig')
     Plug('nvim-lua/plenary.nvim')
     Plug('nvim-lua/popup.nvim')
@@ -34,6 +35,7 @@ vim.call('plug#begin', '~/.config/nvim/plugged')
     Plug('codota/tabnine-nvim')
     Plug('onsails/lspkind.nvim')
     Plug('nvim-lualine/lualine.nvim')
+    Plug('akinsho/org-bullets.nvim')
 vim.call('plug#end')
 
 vim.g.mapleader = ","
@@ -110,8 +112,7 @@ vim.cmd([[
     highlight ExtraWhitespace ctermbg=red guibg=red
     match ExtraWhitespace /\s\+$/
     highlight Comment cterm=italic gui=italic
-    autocmd FileType org setlocal nofoldenable
-
+    autocmd FileType org setlocal tabstop=2 shiftwidth=2
 ]])
 
 vim.api.nvim_create_autocmd({"BufWritePre"}, {
@@ -165,10 +166,11 @@ require('lualine').setup {
 
 
 require('tabnine').setup({
-  disable_auto_comment=true,
+  disable_auto_comment=false,
   accept_keymap="<Tab>",
   debounce_ms = 300,
-  suggestion_color = {gui = "#808080", cterm = 244}
+  dismiss_keymap = "<C-]>",
+  suggestion_color = {gui = "#9fc5e8", cterm = 200}
 })
 
 local lspkind = require('lspkind')
@@ -302,6 +304,8 @@ require('orgmode').setup({
     org_agenda_files = {'~/notes/*'},
     org_default_notes_file = '~/notes/refile.org',
 })
+
+require('org-bullets').setup()
 
 ---------------------------------------------------------------------
 -- Custom funcions
