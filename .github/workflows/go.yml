@@ -18,10 +18,14 @@ jobs:
     - name: Fetch target branch and rebase it
       if: github.event_name == 'pull_request'
       run: |
+        set -x
+        git config user.email "CI@action.git"
+        git config user.name "CI"
         git remote add upstream https://github.com/${{ github.repository }}.git
         git fetch upstream ${{ github.event.pull_request.base.ref }}
         git rebase upstream/${{ github.event.pull_request.base.ref }}
 
     - name: Set the value
       run: |
+        ls -lah
         echo "testCoverage=20" >> $GITHUB_ENV
