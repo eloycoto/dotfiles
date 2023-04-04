@@ -11,14 +11,17 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
+      with:
+        ref: ${{ github.event.pull_request.head.sha != '' &&  github.event.pull_request.head.sha ||  github.sha }}
+
+    - name: Fetch target branch and rebase it
+      if: github.event_name == 'pull_request'
+      run: |
+        git remote add upstream https://github.com/${{ github.repository }}.git
+        git fetch upstream ${{ github.event.pull_request.base.ref }}
+        git rebase upstream/${{ github.event.pull_request.base.ref }}
 
     - name: Set the value
       run: |
         echo "testCoverage=20" >> $GITHUB_ENV
-        dd if=/dev/zero of=/opt/image bs=1M count=128
-        mkfs.ext4 /opt/image
-        sudo losetup -f --show /opt/image
-        whoami
-        sudo usermod -a -G root $(whoami)
-        losetup -f --show /opt/image
