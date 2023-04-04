@@ -3,9 +3,8 @@ name: Go
 on:
   push:
     branches: [ main, master, Test ]
-  pull_request:
+  pull_request_target:
     branches: [ main, master, Test]
-
 jobs:
 
   build:
@@ -16,7 +15,7 @@ jobs:
         ref: ${{ github.event.pull_request.head.sha != '' &&  github.event.pull_request.head.sha ||  github.sha }}
 
     - name: Fetch target branch and rebase it
-      if: github.event_name == 'pull_request'
+      if: github.event_name == 'pull_request_target'
       run: |
         set -x
         git config user.email "CI@action.git"
