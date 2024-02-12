@@ -20,33 +20,34 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 plugins = {
-    'hrsh7th/cmp-buffer',
     'L3MON4D3/LuaSnip',
+    'akinsho/org-bullets.nvim',
+    'codota/tabnine-nvim',
+    'ctrlpvim/ctrlp.vim',
+    'gelguy/wilder.nvim',
+    'gruvbox-community/gruvbox',
+    'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-cmdline',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-path',
     'hrsh7th/nvim-cmp',
-    'ctrlpvim/ctrlp.vim',
-    'gruvbox-community/gruvbox',
     'hrsh7th/nvim-cmp',
     'lewis6991/gitsigns.nvim',
     'liuchengxu/vista.vim',
     'neovim/nvim-lspconfig',
     'nvim-lua/plenary.nvim',
     'nvim-lua/popup.nvim',
+    'nvim-lualine/lualine.nvim',
     'nvim-orgmode/orgmode',
     'nvim-telescope/telescope.nvim',
     'nvim-treesitter/nvim-treesitter',
     'nvim-treesitter/nvim-treesitter',
+    'onsails/lspkind.nvim',
     'rust-lang/rust.vim',
     'ryanoasis/vim-devicons',
     'sirtaj/vim-openscad',
     'tpope/vim-commentary',
-    'codota/tabnine-nvim',
-    'onsails/lspkind.nvim',
-    'nvim-lualine/lualine.nvim',
-    'akinsho/org-bullets.nvim',
 }
 require("lazy").setup(plugins)
 
@@ -89,8 +90,8 @@ vim.o.clipboard = "unnamedplus"
 
 vim.opt.colorcolumn = "80"
 vim.o.colorscheme=gruvbox
-vim.g.gruvbox_contrast_dark = "hard"
-vim.g.gruvbox_contrast_light = "hard"
+vim.g.gruvbox_contrast_dark = "soft"
+vim.g.gruvbox_contrast_light = "soft"
 vim.cmd("colorscheme gruvbox")
 
 vim.g.rustfmt_autosave = 1
@@ -203,7 +204,7 @@ local log = function(message)
     io.close(log_file)
 end
 
-local globaln = 0 
+local globaln = 0
 
 local cmp = require'cmp'
 cmp.setup({
@@ -296,22 +297,15 @@ end
 
 require('gitsigns').setup()
 
+local wilder = require('wilder')
+wilder.setup({modes = {':', '/', '?'}})
+
 ---------------------------------------------------------------------
 -- Treesitter
 ---------------------------------------------------------------------
 require('orgmode').setup_ts_grammar()
 
 -- Tree-sitter configuration
-
-require'nvim-treesitter.configs'.setup {
-    highlight = {
-        enable = true,
-        disable = {'org'},
-        additional_vim_regex_highlighting = {'org'},
-    },
-    ensure_installed = {'org'}, -- Or run :TSUpdate org
-    }
-
 require('orgmode').setup({
     org_agenda_files = {'~/notes/*'},
     org_default_notes_file = '~/notes/refile.org',
@@ -339,3 +333,39 @@ vim.api.nvim_create_user_command(
   ack,
   {bang = true, nargs="*"}
 )
+
+
+
+---------------------------------------------------------------------
+-- Termdebug funcions
+---------------------------------------------------------------------
+
+-- cargo_build_debug Build the cargo crate, and return the executables path
+function cargo_build_debug()
+    vim.cmd("!cargo build")
+    local cargo_output = vim.fn.system("cargo build --message-format=json 2> /dev/null | jq -r 'select(.executable !=null) | [.executable]'")
+    return vim.fn.json_decode(cargo_output)
+end
+
+function Debugger()
+    vim.cmd('packadd termdebug')
+    local filepaths = cargo_build_debug()
+    local paths_len = #filepaths
+    local path = ""
+    if paths_len == 0 then
+        error("executable cannot be found")
+    elseif paths_len == 1 then
+        path = filepaths[1]
+    else
+        local choice = vim.fn.inputlist(filepaths)
+        path = filepaths[choice+1]
+    end
+
+    local stat = vim.loop.fs_stat("openocd.gdb")
+    if stat then
+        path = "-x openocd.gdb " .. path
+    end
+    vim.cmd('Termdebug '..path)
+end
+
+vim.api.nvim_create_user_command('DDebug', Debugger, {})
