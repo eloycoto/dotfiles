@@ -1,3 +1,4 @@
+
 function map(mode, lhs, rhs, opts)
     local options = { noremap = true }
     if opts then
@@ -21,7 +22,6 @@ vim.opt.rtp:prepend(lazypath)
 
 plugins = {
     'L3MON4D3/LuaSnip',
-    'akinsho/org-bullets.nvim',
     'codota/tabnine-nvim',
     'ctrlpvim/ctrlp.vim',
     'gelguy/wilder.nvim',
@@ -311,7 +311,7 @@ require('orgmode').setup({
     org_default_notes_file = '~/notes/refile.org',
 })
 
-require('org-bullets').setup()
+--require('org-bullets').setup()
 
 ---------------------------------------------------------------------
 -- Custom funcions
@@ -343,12 +343,14 @@ vim.api.nvim_create_user_command(
 -- cargo_build_debug Build the cargo crate, and return the executables path
 function cargo_build_debug()
     vim.cmd("!cargo build")
-    local cargo_output = vim.fn.system("cargo build --message-format=json 2> /dev/null | jq -r 'select(.executable !=null) | [.executable]'")
+    local cargo_output = vim.fn.system("cargo build --message-format=json 2> /dev/null | jq -r -s  '[.[] | select(.executable !=null) | .executable'] | sort")
     return vim.fn.json_decode(cargo_output)
 end
 
 function Debugger()
     vim.cmd('packadd termdebug')
+
+    vim.g.termdebug_wide = 80
     local filepaths = cargo_build_debug()
     local paths_len = #filepaths
     local path = ""
@@ -361,10 +363,14 @@ function Debugger()
         path = filepaths[choice+1]
     end
 
-    local stat = vim.loop.fs_stat("openocd.gdb")
-    if stat then
-        path = "-x openocd.gdb " .. path
+    local options = {"custom.gdb", "openocd.gdb"}
+    for _, option in ipairs(options) do
+        local stat = vim.loop.fs_stat(option)
+        if stat then
+            path = "-x " .. option .. " " .. path
+        end
     end
+
     vim.cmd('Termdebug '..path)
 end
 
