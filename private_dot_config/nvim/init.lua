@@ -27,21 +27,18 @@ plugins = {
     'gelguy/wilder.nvim',
     'gruvbox-community/gruvbox',
     'hrsh7th/cmp-buffer',
-    'hrsh7th/cmp-buffer',
     'hrsh7th/cmp-cmdline',
     'hrsh7th/cmp-nvim-lsp',
     'hrsh7th/cmp-path',
     'hrsh7th/nvim-cmp',
-    'hrsh7th/nvim-cmp',
     'lewis6991/gitsigns.nvim',
-    'liuchengxu/vista.vim',
+    'liuchengxu/vista.vim', --Tagbar
     'neovim/nvim-lspconfig',
     'nvim-lua/plenary.nvim',
     'nvim-lua/popup.nvim',
     'nvim-lualine/lualine.nvim',
     'nvim-orgmode/orgmode',
     'nvim-telescope/telescope.nvim',
-    'nvim-treesitter/nvim-treesitter',
     'nvim-treesitter/nvim-treesitter',
     'onsails/lspkind.nvim',
     'rust-lang/rust.vim',
@@ -177,6 +174,10 @@ require('lualine').setup {
   extensions = {}
 }
 
+---------------------------------------
+-- Vista
+---------------------------------------
+vim.api.nvim_create_user_command('Tagbar', ":Vista", {})
 
 require('tabnine').setup({
   disable_auto_comment=false,
@@ -309,6 +310,12 @@ require('orgmode').setup_ts_grammar()
 require('orgmode').setup({
     org_agenda_files = {'~/notes/*'},
     org_default_notes_file = '~/notes/refile.org',
+    mappings = {
+        org = {
+            org_do_demote="<leader><",
+            org_do_promote="<leader>>",
+        }
+    }
 })
 
 --require('org-bullets').setup()
@@ -351,6 +358,7 @@ function Debugger()
     vim.cmd('packadd termdebug')
 
     vim.g.termdebug_wide = 80
+    -- let g:termdebug_wide=1
     local filepaths = cargo_build_debug()
     local paths_len = #filepaths
     local path = ""
