@@ -45,6 +45,8 @@ plugins = {
     'ryanoasis/vim-devicons',
     'sirtaj/vim-openscad',
     'tpope/vim-commentary',
+    'RRethy/vim-illuminate',
+    { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} }
 }
 require("lazy").setup(plugins)
 
@@ -178,6 +180,33 @@ require('lualine').setup {
 -- Vista
 ---------------------------------------
 vim.api.nvim_create_user_command('Tagbar', ":Vista", {})
+
+require('illuminate').configure({
+    providers = {
+        'lsp',
+        -- 'treesitter',
+        'regex',
+    },
+    delay = 500,
+    filetype_overrides = {},
+    filetypes_denylist = {
+        'dirbuf',
+        'dirvish',
+        'fugitive',
+    },
+    filetypes_allowlist = {},
+    modes_denylist = {},
+    modes_allowlist = {},
+    providers_regex_syntax_denylist = {},
+    providers_regex_syntax_allowlist = {},
+    under_cursor = true,
+    large_file_cutoff = nil,
+    large_file_overrides = nil,
+    min_count_to_highlight = 1,
+    should_enable = function(bufnr) return true end,
+    case_insensitive_regex = false,
+})
+
 
 require('tabnine').setup({
   disable_auto_comment=false,
