@@ -58,7 +58,7 @@ vim.opt.conceallevel = 3
 vim.opt.conceallevel = 2
 vim.opt.concealcursor = 'nc'
 vim.opt.termguicolors =  true
-vim.o.nocompatible = true
+-- vim.o.nocompatible = true
 vim.opt.syntax = "on"
 vim.opt.cursorline = true
 vim.opt.showmode = true
@@ -75,8 +75,8 @@ vim.opt.cmdheight = 3
 vim.opt.updatetime = 300
 vim.opt.so = 3
 vim.opt.termguicolors = true
-vim.o.nobackup = true
-vim.o.nowb = true
+-- vim.o.nobackup = true
+-- vim.o.nowb = true
 vim.opt.background = light
 vim.opt.completeopt="menuone,noinsert,noselect"
 
@@ -88,7 +88,7 @@ vim.o.shiftwidth = 4
 vim.o.clipboard = "unnamedplus"
 
 vim.opt.colorcolumn = "80"
-vim.o.colorscheme=gruvbox
+-- vim.o.colorscheme=gruvbox
 vim.g.gruvbox_contrast_dark = "soft"
 vim.g.gruvbox_contrast_light = "soft"
 vim.cmd("colorscheme gruvbox")
@@ -96,7 +96,7 @@ vim.cmd("colorscheme gruvbox")
 vim.g.rustfmt_autosave = 1
 
 
-vim.opt.guitablabel="%M%t"
+-- vim.opt.guitablabel="%M%t"
 map('n', '<C-t>', ':tabnew<CR>')
 map('n', '<C-m>', ':tabnext<CR>')
 map('n', '<C-k>', ':tabprevious<CR>')
@@ -347,7 +347,14 @@ require('orgmode').setup({
     }
 })
 
---require('org-bullets').setup()
+-- Small utility to be able to add VISIBILITY to the recurrent nodes.
+vim.api.nvim_exec([[
+    augroup OrgFileOpenedAutocmd
+        autocmd!
+        autocmd BufReadPost *.org lua require("orgmode-custom").VISIBILITY()
+    augroup END
+]], false)
+
 
 ---------------------------------------------------------------------
 -- Custom funcions
@@ -412,3 +419,4 @@ function Debugger()
 end
 
 vim.api.nvim_create_user_command('DDebug', Debugger, {})
+
