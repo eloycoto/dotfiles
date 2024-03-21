@@ -1,7 +1,7 @@
 # Chezmoi config
 CHEZMOI_VERSION=1.7.19
-CHEZMOI_BIN=chezmoi
-CHEZMOI=./chezmoi -S $(PWD)
+CHEZMOI_BIN=./chezmoi
+CHEZMOI= $(CHEZMOI_BIN) -S $(PWD)
 
 # Makefile confi
 Q = @
