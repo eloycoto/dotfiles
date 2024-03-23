@@ -325,6 +325,16 @@ for _, lsp in ipairs(servers) do
     }
 end
 
+if vim.fn.executable('ltext') > 0 then
+    nvim_lsp["ltext"].setup {
+        on_attach = on_attach,
+        capabilities = capabilities,
+        cmd = { "ltex-ls" },
+        filetypes = { "markdown", "text" },
+        flags = { debounce_text_changes = 300 }
+    }
+end
+
 require('gitsigns').setup()
 
 local wilder = require('wilder')
@@ -419,4 +429,3 @@ function Debugger()
 end
 
 vim.api.nvim_create_user_command('DDebug', Debugger, {})
-
