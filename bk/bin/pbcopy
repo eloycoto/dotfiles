@@ -1,9 +1,0 @@
-if [[ -n "$SSH_TTY" ]]; then
-    nc localhost 5566
-else
-    if [[ $(uname) == "Darwin" ]];then
-        /usr/bin/pbcopy
-    else
-        xclip -i -selection clipboard
-    fi
-fi

@@ -1,8 +1,0 @@
-ipdb
-ipython
-mccabe
-pyflakes
-pylint
-rope
-pep8
-requests
