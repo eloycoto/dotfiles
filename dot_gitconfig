@@ -29,8 +29,21 @@
 [push]
     default = matching
 
+[diff]
+    algorithm = histogram
+    tool = difftastic
+
+[difftool]
+    prompt = false
+
+[difftool "difftastic"]
+    cmd = difft "$LOCAL" "$REMOTE"
+
+[pager]
+    difftool = true
+
 [rebase]
   autoStash = true
 
 [commit]
-    gpgsign = true
+    gpgsign = false
