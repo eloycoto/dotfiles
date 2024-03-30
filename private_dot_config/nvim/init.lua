@@ -125,6 +125,7 @@ vim.cmd([[
     match ExtraWhitespace /\s\+$/
     highlight Comment cterm=italic gui=italic
     autocmd FileType org setlocal tabstop=2 shiftwidth=2
+    autocmd FileType nix setlocal tabstop=2 shiftwidth=2
 ]])
 
 vim.api.nvim_create_autocmd({"BufWritePre"}, {
