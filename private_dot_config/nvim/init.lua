@@ -430,3 +430,9 @@ function Debugger()
 end
 
 vim.api.nvim_create_user_command('DDebug', Debugger, {})
+
+--------------------
+-- Ellm functions
+--------------------
+ellm = require("llm").new()
+vim.api.nvim_command('command! -range LLM lua ellm:call_function()')
