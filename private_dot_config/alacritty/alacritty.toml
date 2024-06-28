@@ -587,7 +587,7 @@ semantic_escape_chars = ",│`|:\"' ()[]{}<>"
 
 [shell]
 args = ["--login"]
-program = "/usr/bin/zsh"
+program = "zsh"
 
 [window]
 decorations = "none"
