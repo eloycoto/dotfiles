@@ -46,4 +46,4 @@
   autoStash = true
 
 [commit]
-    gpgsign = false
+    gpgsign = true
