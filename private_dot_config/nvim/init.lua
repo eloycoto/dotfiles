@@ -344,8 +344,6 @@ wilder.setup({modes = {':', '/', '?'}})
 ---------------------------------------------------------------------
 -- Treesitter
 ---------------------------------------------------------------------
-require('orgmode').setup_ts_grammar()
-
 -- Tree-sitter configuration
 require('orgmode').setup({
     org_agenda_files = {'~/notes/*'},
