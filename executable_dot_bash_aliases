@@ -1,34 +1,16 @@
 alias s='sudo -E'
 alias sudo='sudo -E'
 
-if [ $(uname) =  "Darwin" ]; then
-    #Darwing support for commands
-    alias ll='ls -la'
-    alias ls='ls -G'
-    #PYTHONPATH for mac
-    export PYTHONPATH='/Library/Frameworks/Python.framework/Versions/2.7/lib/python2.7/site-packages/'
-else
-    alias ls='ls --color=auto'
-    alias ll='ls -l'
-fi
-
-if [[ $(command -v vimx) ]]; then
-    alias vim='vimx'
-fi
+alias ls='ls --color=auto'
+alias ll='ls -l'
 
 #Color
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
 alias egrep='egrep --color=auto'
 
-#Subversion
-alias sup='svn up'
-alias sadd='svn add'
-alias sci='svn ci'
-alias sstatus='svn status'
 
 #File Work
-
 extract () {
     if [ -f $1 ] ; then
       case $1 in
@@ -52,93 +34,17 @@ extract () {
 
 
 #Work
-alias vpnk="s vpnc-disconnect"
-alias vpnc="s vpnc-connect"
-alias change_dns="s sed -i s/'^nameserver .*'/'nameserver 8.8.8.8'/g /etc/resolv.conf"
-
-function iroute(){
-    s ip route add $1 via $2
-}
-
-
-function dpkg-search(){
-	dpkg -l | grep $1
-}
-
 alias top10="ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10"
 alias pbcopy='xclip -selection clipboard'
-#logs
-
-
-function urldecode(){
-    while read data
-    do
-        echo $data | python -c "import sys, urllib as ul;print ul.unquote_plus(sys.stdin.readline())"
-    done
-}
-
-
-function urlencode(){
-    while read data
-    do
-        echo $data | python -c "import sys, urllib as ul;print ul.quote_plus(sys.stdin.readline())"
-    done
-}
-
-#API
-function jsonCurl(){
-	if [ $1 ];then
-		curl $1 | pjson
-	else
-		echo "No url present"
-	fi
-}
-
-
-#Asterisk
-function ast_start(){
-	/etc/init.d/asterisk start
-}
-
-function ast_restart(){
-	/etc/init.d/asterisk start
-}
-
-function ast_channels(){
-	asterisk -rnx "core show channels"
-}
-
-function ast_pri(){
-	asterisk -rnx "pri show spams"
-}
-
-function ast_pri_channels(){
-	asterisk -nrx "pri show channels" |grep "^\ " | awk '{if ($7 != "") print "Port "$1}' | uniq -c
-}
-
-function sysdump_unarchive() {
-    mkdir -p $ARCHIVE
-    ARCHIVE="archive"
-    for line in $(ls bugtool-cilium-*.tar);do
-        POD=$(echo $line | awk -F '-' '{print $2"-"$3}')
-        rm -r $POD 2>/dev/null || true
-        echo "Unarchive ${line} to ${POD}"
-        folder=$(mktemp -d)
-        tar -xf $line -C $folder --strip-components=1
-        mv ${folder}/cmd ${POD}
-        mv $line $ARCHIVE
-    done
-}
+alias cgrep="ngrep -d any -P \"'\" -W byline -T -i"
 
 #TMUX
 alias tcr="for i in \$(tmux list-windows | awk -v x=\$(tmux display-message -p '#I') -F ':' '\$1 > x {print \$1}'); do tmux kill-window -t \$i ; done"
-
 
 #SIP
 alias sip-grep="ngrep -d any -P \"'\" -W byline -T -i port 5060"
 alias sip-bgrep="ngrep -d any -P \"'\" -W byline -T -i -t \"(^|CSeq:\s?\d* )(INVITE|ACK|CANCEL|BYE|MESSAGE|REFER|PRACK|INFO|UPDATE)\" port 5060"
 
-alias cgrep="ngrep -d any -P \"'\" -W byline -T -i"
 
 #other
 function convertxcf(){
@@ -154,9 +60,6 @@ function read_csv(){
     sed 's/,,/, ,/g;s/,,/, ,/g' $1 | column -s, -t
 }
 
-
-# Docker commands
-# alias do_cleanup_exited="docker rm $(docker ps -a --filter='status=exited' -q)"
 
 function jqr(){
     jq -r $1 | column -t
