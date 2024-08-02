@@ -77,7 +77,7 @@ vim.opt.so = 3
 vim.opt.termguicolors = true
 -- vim.o.nobackup = true
 -- vim.o.nowb = true
-vim.opt.background = light
+vim.opt.background="light"
 vim.opt.completeopt="menuone,noinsert,noselect"
 
 vim.api.nvim_command("set noswapfile")
