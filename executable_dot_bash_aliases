@@ -1,4 +1,4 @@
-alias s='sudo -E'
+alias s='sudo env "PATH=$PATH"  '
 alias sudo='sudo -E'
 
 alias ls='ls --color=auto'
