@@ -22,7 +22,6 @@ vim.opt.rtp:prepend(lazypath)
 
 plugins = {
     'L3MON4D3/LuaSnip',
-    'codota/tabnine-nvim',
     'ctrlpvim/ctrlp.vim',
     'gelguy/wilder.nvim',
     'gruvbox-community/gruvbox',
@@ -46,7 +45,41 @@ plugins = {
     'sirtaj/vim-openscad',
     'tpope/vim-commentary',
     'RRethy/vim-illuminate',
-    { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} }
+    "nvim-tree/nvim-web-devicons",
+    { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
+    {
+      "yetone/avante.nvim",
+      event = "VeryLazy",
+      lazy = false,
+      build = "make",
+      dependencies = {
+        "stevearc/dressing.nvim",
+        "nvim-lua/plenary.nvim",
+        "MunifTanjim/nui.nvim",
+        {
+          -- support for image pasting
+          "HakonHarnes/img-clip.nvim",
+          event = "VeryLazy",
+          opts = {
+            default = {
+              embed_image_as_base64 = false,
+              prompt_for_file_name = false,
+              drag_and_drop = {
+                insert_mode = true,
+              },
+            },
+          },
+        },
+        {
+          -- Make sure to set this up properly if you have lazy=true
+          'MeanderingProgrammer/render-markdown.nvim',
+          opts = {
+            file_types = { "markdown", "Avante" },
+          },
+          ft = { "markdown", "Avante" },
+        },
+      },
+    }
 }
 require("lazy").setup(plugins)
 
@@ -55,33 +88,34 @@ vim.g.foldlevel = 2
 vim.opt.foldlevel = 3
 vim.opt.conceallevel = 3
 
-vim.opt.conceallevel = 2
-vim.opt.concealcursor = 'nc'
-vim.opt.termguicolors =  true
--- vim.o.nocompatible = true
-vim.opt.syntax = "on"
-vim.opt.cursorline = true
-vim.opt.showmode = true
-vim.opt.history = 1000
-vim.opt.undolevels = 100
-vim.opt.ruler=true
-vim.o.number=true
-vim.opt.ic = true
-vim.opt.splitbelow = true
-vim.opt.splitright  = true
-vim.opt.laststatus = 2
-vim.opt.hidden = true
-vim.opt.cmdheight = 3
-vim.opt.updatetime = 300
-vim.opt.so = 3
-vim.opt.termguicolors = true
 -- vim.o.nobackup = true
+-- vim.o.nocompatible = true
 -- vim.o.nowb = true
 vim.opt.background="light"
+vim.opt.cmdheight = 3
 vim.opt.completeopt="menuone,noinsert,noselect"
+vim.opt.concealcursor = 'nc'
+vim.opt.conceallevel = 2
+vim.opt.cursorline = true
+vim.opt.hidden = true
+vim.opt.history = 1000
+vim.opt.ic = true
+vim.opt.ruler=true
+vim.opt.showmode = true
+vim.opt.so = 3
+vim.opt.splitbelow = true
+vim.opt.splitright  = true
+vim.opt.syntax = "on"
+vim.opt.termguicolors =  true
+vim.opt.termguicolors = true
+vim.opt.undolevels = 100
+vim.opt.updatetime = 300
 
 vim.api.nvim_command("set noswapfile")
+vim.api.nvim_command("set modifiable")
 
+vim.o.laststatus = 3
+vim.o.number=true
 vim.o.expandtab = true
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
@@ -128,13 +162,17 @@ vim.cmd([[
     autocmd FileType nix setlocal tabstop=2 shiftwidth=2
 ]])
 
-vim.api.nvim_create_autocmd({"BufWritePre"}, {
-    pattern = {"*.go"},
+vim.api.nvim_create_autocmd("FileType", {
+    pattern = "markdown",
     callback = function()
-        vim.lsp.buf.code_action()
-        vim.lsp.buf.format({async = true})
-    end,
+        vim.opt.equalalways = true
+        vim.opt.winwidth = 100
+        vim.opt_local.columns = 80
+        vim.opt_local.textwidth = 80
+        vim.opt_local.wrap = true
+    end
 })
+
 
 require('lualine').setup {
   options = {
@@ -148,7 +186,7 @@ require('lualine').setup {
     },
     ignore_focus = {},
     always_divide_middle = true,
-    globalstatus = false,
+    globalstatus = vim.go.laststatus == 3,
     refresh = {
       statusline = 1000,
       tabline = 1000,
@@ -159,7 +197,16 @@ require('lualine').setup {
     lualine_a = {'mode'},
     lualine_b = {'branch', 'diff', 'diagnostics'},
     lualine_c = {{'filename', path=1}},
-    lualine_x = {'encoding', 'fileformat', 'filetype', 'tabnine'},
+    lualine_x = {
+      {
+        function()
+          return require("avante.config").options.provider
+        end,
+      },
+      'encoding',
+      'fileformat',
+      'filetype'
+    },
     lualine_y = {'progress'},
     lualine_z = {'location'}
   },
@@ -209,21 +256,12 @@ require('illuminate').configure({
 })
 
 
-require('tabnine').setup({
-  disable_auto_comment=false,
-  accept_keymap="<Tab>",
-  debounce_ms = 300,
-  dismiss_keymap = "<C-]>",
-  suggestion_color = {gui = "#9fc5e8", cterm = 200}
-})
-
 local lspkind = require('lspkind')
 
 local source_mapping = {
 	buffer = "[Buffer]",
 	nvim_lsp = "[LSP]",
 	nvim_lua = "[Lua]",
-	cmp_tabnine = "[TN]",
 	path = "[Path]",
 }
 
@@ -326,6 +364,14 @@ for _, lsp in ipairs(servers) do
     }
 end
 
+vim.api.nvim_create_autocmd({"BufWritePre"}, {
+    pattern = {"*.go", "*.rs"},
+    callback = function()
+        vim.lsp.buf.code_action()
+        vim.lsp.buf.format({async = true})
+    end,
+})
+
 if vim.fn.executable('ltext') > 0 then
     nvim_lsp["ltext"].setup {
         on_attach = on_attach,
@@ -335,6 +381,7 @@ if vim.fn.executable('ltext') > 0 then
         flags = { debounce_text_changes = 300 }
     }
 end
+
 
 require('gitsigns').setup()
 
@@ -434,3 +481,139 @@ vim.api.nvim_create_user_command('DDebug', Debugger, {})
 --------------------
 ellm = require("llm").new()
 vim.api.nvim_command('command! -range LLM lua ellm:call_function()')
+
+
+--------------------
+-- Avante
+--------------------
+local function create_ollama_provider(model_name)
+    return {
+        endpoint = os.getenv("OLLAMA_ENDPOINT"),
+        model = model_name,
+        timeout = 30000,
+        temperature = 0,
+        max_tokens = 4096,
+        parse_curl_args = function(opts, code_opts)
+            return {
+                url = opts.endpoint .. "/chat/completions",
+                headers = {
+                    ["Accept"] = "application/json",
+                    ["Content-Type"] = "application/json",
+                },
+                body = {
+                    model = opts.model,
+                    messages = require("avante.providers").copilot.parse_messages(code_opts),
+                    max_tokens = 16384,
+                    stream = true,
+                },
+            }
+        end,
+        parse_response_data = function(data_stream, event_state, opts)
+            require("avante.providers").openai.parse_response(data_stream, event_state, opts)
+        end,
+    }
+end
+
+---
+avante_config = {
+    provider = "ollama",
+    vendors = {
+        ollama = create_ollama_provider("qwen2.5-coder:14b"),
+        llama = create_ollama_provider("llama3.1:8b"),
+    },
+
+    dual_boost = {
+        enabled = false,
+        first_provider = "openai",
+        second_provider = "claude",
+        prompt = "Based on the two reference outputs below, generate a response that incorporates elements from both but reflects your own judgment and unique perspective. Do not provide any explanation, just give the response directly. Reference Output 1: [{{provider1_output}}], Reference Output 2: [{{provider2_output}}]",
+        timeout = 60000, -- Timeout in milliseconds
+      },
+      behaviour = {
+        auto_suggestions = true, -- Experimental stage
+        auto_set_highlight_group = true,
+        auto_set_keymaps = true,
+        auto_apply_diff_after_generation = false,
+        support_paste_from_clipboard = true,
+        minimize_diff = true, -- Whether to remove unchanged lines when applying a code block
+      },
+      mappings = {
+        --- @class AvanteConflictMappings
+        diff = {
+          ours = "co",
+          theirs = "ct",
+          all_theirs = "ca",
+          both = "cb",
+          cursor = "cc",
+          next = "]x",
+          prev = "[x",
+        },
+        suggestion = {
+          accept = "<M-l>",
+          next = "<M-]>",
+          prev = "<M-[>",
+          dismiss = "<C-]>",
+        },
+        jump = {
+          next = "]]",
+          prev = "[[",
+        },
+        submit = {
+          normal = "<CR>",
+          insert = "<C-s>",
+        },
+        sidebar = {
+          apply_all = "A",
+          apply_cursor = "a",
+          switch_windows = "<Tab>",
+          reverse_switch_windows = "<S-Tab>",
+        },
+      },
+      hints = { enabled = true },
+      windows = {
+        ---@type "right" | "left" | "top" | "bottom"
+        position = "right", -- the position of the sidebar
+        wrap = true, -- similar to vim.o.wrap
+        width = 30, -- default % based on available width
+        sidebar_header = {
+          enabled = true, -- true, false to enable/disable the header
+          align = "center", -- left, center, right for title
+          rounded = true,
+        },
+        input = {
+          prefix = "> ",
+          height = 8, -- Height of the input window in vertical layout
+        },
+        edit = {
+          border = "rounded",
+          start_insert = true, -- Start insert mode when opening the edit window
+        },
+        ask = {
+          floating = false, -- Open the 'AvanteAsk' prompt in a floating window
+          start_insert = true, -- Start insert mode when opening the ask window
+          border = "rounded",
+          ---@type "ours" | "theirs"
+          focus_on_apply = "ours", -- which diff to focus after applying
+        },
+      },
+      highlights = {
+        ---@type AvanteConflictHighlights
+        diff = {
+          current = "DiffText",
+          incoming = "DiffAdd",
+        },
+      },
+      --- @class AvanteConflictUserConfig
+      diff = {
+        autojump = true,
+        ---@type string | fun(): any
+        list_opener = "copen",
+        --- Override the 'timeoutlen' setting while hovering over a diff (see :help timeoutlen).
+        --- Helps to avoid entering operator-pending mode with diff mappings starting with `c`.
+        --- Disable by setting to -1.
+        override_timeoutlen = 500,
+      }
+}
+
+require('avante_lib').load()
+require("avante").setup(avante_config)
