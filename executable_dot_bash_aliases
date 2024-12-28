@@ -60,11 +60,62 @@ function read_csv(){
     sed 's/,,/, ,/g;s/,,/, ,/g' $1 | column -s, -t
 }
 
-
 function jqr(){
     jq -r $1 | column -t
 }
 
 function yubikey_refresh_gpg(){
   gpg-connect-agent "scd serialno" "learn --force" /bye
+}
+
+# https://simonwillison.net/2024/Dec/19/q-and-qv-zsh-functions/
+q() {
+  local url="$1"
+  local question="$2"
+
+  # Fetch the URL content through Jina
+  local content=$(curl -s "https://r.jina.ai/$url")
+
+  # Check if the content was retrieved successfully
+  if [ -z "$content" ]; then
+    echo "Failed to retrieve content from the URL."
+    return 1
+  fi
+
+  system="
+  You are a helpful assistant that can answer questions about the content.
+  Reply concisely, in a few sentences.
+
+  The content:
+  ${content}
+  "
+
+  # Use llm with the fetched content as a system prompt
+  llm prompt "$question" -s "$system"
+}
+
+qv() {
+  local url="$1"
+  local question="$2"
+
+  # Fetch the URL content through Jina
+  local subtitle_url=$(yt-dlp -q --skip-download --convert-subs srt --write-sub --sub-langs "en" --write-auto-sub --print "requested_subtitles.en.url" "$url")
+  local content=$(curl -s "$subtitle_url" | sed '/^$/d' | grep -v '^[0-9]*$' | grep -v '\-->' | sed 's/<[^>]*>//g' | tr '\n' ' ')
+
+  # Check if the content was retrieved successfully
+  if [ -z "$content" ]; then
+    echo "Failed to retrieve content from the URL."
+    return 1
+  fi
+
+  system="
+  You are a helpful assistant that can answer questions about YouTube videos.
+  Reply concisely, in a few sentences.
+
+  The content:
+  ${content}
+  "
+
+  # Use llm with the fetched content as a system prompt
+  llm prompt "$question" -s "$system"
 }
