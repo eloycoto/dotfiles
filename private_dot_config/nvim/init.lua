@@ -85,43 +85,44 @@ require("lazy").setup(plugins)
 
 vim.g.mapleader = ","
 vim.g.foldlevel = 2
-vim.opt.foldlevel = 3
-vim.opt.conceallevel = 3
 
--- vim.o.nobackup = true
--- vim.o.nocompatible = true
--- vim.o.nowb = true
 vim.opt.background="light"
 vim.opt.cmdheight = 3
+vim.opt.colorcolumn = "80"
 vim.opt.completeopt="menuone,noinsert,noselect"
 vim.opt.concealcursor = 'nc'
 vim.opt.conceallevel = 2
+vim.opt.conceallevel = 3
 vim.opt.cursorline = true
+vim.opt.foldlevel = 3
 vim.opt.hidden = true
 vim.opt.history = 1000
 vim.opt.ic = true
+vim.opt.lazyredraw = true
 vim.opt.ruler=true
 vim.opt.showmode = true
 vim.opt.so = 3
 vim.opt.splitbelow = true
 vim.opt.splitright  = true
+vim.opt.synmaxcol = 240
 vim.opt.syntax = "on"
 vim.opt.termguicolors =  true
 vim.opt.termguicolors = true
+vim.opt.timeoutlen = 300
 vim.opt.undolevels = 100
-vim.opt.updatetime = 300
+vim.opt.updatetime = 250
 
 vim.api.nvim_command("set noswapfile")
 vim.api.nvim_command("set modifiable")
 
+vim.o.clipboard = "unnamedplus"
+vim.o.expandtab = true
 vim.o.laststatus = 3
 vim.o.number=true
-vim.o.expandtab = true
-vim.o.tabstop = 4
 vim.o.shiftwidth = 4
-vim.o.clipboard = "unnamedplus"
+vim.o.tabstop = 4
 
-vim.opt.colorcolumn = "80"
+
 -- vim.o.colorscheme=gruvbox
 vim.g.gruvbox_contrast_dark = "soft"
 vim.g.gruvbox_contrast_light = "soft"
