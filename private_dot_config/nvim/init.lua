@@ -201,7 +201,7 @@ require('lualine').setup {
     lualine_x = {
       {
         function()
-          return require("avante.config").options.provider
+          return require("avante.config").provider
         end,
       },
       'encoding',
@@ -368,8 +368,8 @@ end
 vim.api.nvim_create_autocmd({"BufWritePre"}, {
     pattern = {"*.go", "*.rs"},
     callback = function()
-        vim.lsp.buf.code_action()
-        vim.lsp.buf.format({async = true})
+        -- vim.lsp.buf.code_action()
+        -- vim.lsp.buf.format({async = true})
     end,
 })
 
@@ -509,8 +509,8 @@ local function create_ollama_provider(model_name)
                 },
             }
         end,
-        parse_response_data = function(data_stream, event_state, opts)
-            require("avante.providers").openai.parse_response(data_stream, event_state, opts)
+        parse_response_data = function(ctx, data_stream, event_state, opts)
+            require("avante.providers").openai.parse_response(ctx, data_stream, event_state, opts)
         end,
     }
 end
@@ -519,19 +519,26 @@ end
 avante_config = {
     provider = "ollama",
     vendors = {
-        ollama = create_ollama_provider("qwen2.5-coder:14b"),
+        ollama = create_ollama_provider("qwen2.5-coder:7b"),
         llama = create_ollama_provider("llama3.1:8b"),
+        ["claude-haiku"] = {
+            __inherited_from = "claude",
+            model = "claude-3-haiku-20241022",
+            timeout = 30000,
+            temperature = 0,
+            max_tokens = 8000,
+        },
     },
 
     dual_boost = {
         enabled = false,
-        first_provider = "openai",
-        second_provider = "claude",
+        first_provider = "ollama",
+        second_provider = "openai",
         prompt = "Based on the two reference outputs below, generate a response that incorporates elements from both but reflects your own judgment and unique perspective. Do not provide any explanation, just give the response directly. Reference Output 1: [{{provider1_output}}], Reference Output 2: [{{provider2_output}}]",
         timeout = 60000, -- Timeout in milliseconds
       },
       behaviour = {
-        auto_suggestions = true, -- Experimental stage
+        auto_suggestions = false, -- Experimental stage
         auto_set_highlight_group = true,
         auto_set_keymaps = true,
         auto_apply_diff_after_generation = false,
@@ -615,6 +622,10 @@ avante_config = {
         override_timeoutlen = 500,
       }
 }
+
+vim.api.nvim_create_user_command('Claude', function()
+    require("avante.api").switch_provider("claude")
+end, {})
 
 require('avante_lib').load()
 require("avante").setup(avante_config)
