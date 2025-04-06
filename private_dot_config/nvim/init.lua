@@ -21,6 +21,7 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 plugins = {
+    'folke/zen-mode.nvim',
     'L3MON4D3/LuaSnip',
     'ctrlpvim/ctrlp.vim',
     'gelguy/wilder.nvim',
@@ -95,6 +96,9 @@ vim.opt.conceallevel = 2
 vim.opt.conceallevel = 3
 vim.opt.cursorline = true
 vim.opt.foldlevel = 3
+vim.opt.linebreak = true
+vim.opt.breakindent = true
+vim.opt.formatoptions = "cqjw"
 vim.opt.hidden = true
 vim.opt.history = 1000
 vim.opt.ic = true
@@ -411,7 +415,6 @@ vim.api.nvim_exec([[
         autocmd BufReadPost *.org lua require("orgmode-custom").VISIBILITY()
     augroup END
 ]], false)
-
 
 ---------------------------------------------------------------------
 -- Custom funcions
