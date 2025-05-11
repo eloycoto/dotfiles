@@ -130,7 +130,7 @@ vim.o.tabstop = 4
 -- vim.o.colorscheme=gruvbox
 vim.g.gruvbox_contrast_dark = "soft"
 vim.g.gruvbox_contrast_light = "soft"
-vim.cmd("colorscheme gruvbox")
+vim.cmd.colorscheme("gruvbox")
 
 vim.g.rustfmt_autosave = 1
 
@@ -393,6 +393,18 @@ require('gitsigns').setup()
 local wilder = require('wilder')
 wilder.setup({modes = {':', '/', '?'}})
 
+-- Add the autocmd to that group
+vim.api.nvim_create_autocmd("BufReadPost", {
+  pattern = "*.org",
+  callback = function()
+    -- PR: https://github.com/nvim-orgmode/orgmode/pull/965
+    vim.api.nvim_set_hl(0, '@org.hyperlink', { link = '@markup.link.url' })
+    vim.api.nvim_set_hl(0, '@org.hyperlink.url', { link = '@org.hyperlink' })
+    vim.api.nvim_set_hl(0, '@org.hyperlink.desc', { link = '@org.hyperlink' })
+    require("orgmode-custom").VISIBILITY()
+  end,
+})
+
 ---------------------------------------------------------------------
 -- Treesitter
 ---------------------------------------------------------------------
@@ -407,14 +419,6 @@ require('orgmode').setup({
         }
     }
 })
-
--- Small utility to be able to add VISIBILITY to the recurrent nodes.
-vim.api.nvim_exec([[
-    augroup OrgFileOpenedAutocmd
-        autocmd!
-        autocmd BufReadPost *.org lua require("orgmode-custom").VISIBILITY()
-    augroup END
-]], false)
 
 ---------------------------------------------------------------------
 -- Custom funcions
