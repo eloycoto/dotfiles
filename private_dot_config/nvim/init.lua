@@ -130,7 +130,18 @@ vim.o.tabstop = 4
 -- vim.o.colorscheme=gruvbox
 vim.g.gruvbox_contrast_dark = "soft"
 vim.g.gruvbox_contrast_light = "soft"
+vim.g.gruvbox_bold = 1
 vim.cmd.colorscheme("gruvbox")
+
+vim.cmd([[
+  augroup GruvboxBoldFix
+    autocmd!
+    autocmd ColorScheme * highlight Statement gui=bold cterm=bold
+    autocmd ColorScheme * highlight Keyword gui=bold cterm=bold
+    autocmd ColorScheme * highlight Type gui=bold cterm=bold
+    autocmd ColorScheme * highlight Identifier gui=bold cterm=bold
+  augroup END
+]])
 
 vim.g.rustfmt_autosave = 1
 
@@ -393,22 +404,11 @@ require('gitsigns').setup()
 local wilder = require('wilder')
 wilder.setup({modes = {':', '/', '?'}})
 
--- Add the autocmd to that group
-vim.api.nvim_create_autocmd("BufReadPost", {
-  pattern = "*.org",
-  callback = function()
-    -- PR: https://github.com/nvim-orgmode/orgmode/pull/965
-    vim.api.nvim_set_hl(0, '@org.hyperlink', { link = '@markup.link.url' })
-    vim.api.nvim_set_hl(0, '@org.hyperlink.url', { link = '@org.hyperlink' })
-    vim.api.nvim_set_hl(0, '@org.hyperlink.desc', { link = '@org.hyperlink' })
-    require("orgmode-custom").VISIBILITY()
-  end,
-})
 
 ---------------------------------------------------------------------
--- Treesitter
+-- Orgmode
 ---------------------------------------------------------------------
--- Tree-sitter configuration
+-- Orgmode configuration
 require('orgmode').setup({
     org_agenda_files = {'~/notes/*'},
     org_default_notes_file = '~/notes/refile.org',
@@ -418,6 +418,24 @@ require('orgmode').setup({
             org_do_promote="<leader>>",
         }
     }
+})
+
+
+vim.api.nvim_create_autocmd("BufReadPost", {
+  pattern = "*.org",
+  callback = function()
+    -- PR: https://github.com/nvim-orgmode/orgmode/pull/965
+    vim.api.nvim_set_hl(0, '@org.hyperlink', { link = '@markup.link.url' })
+    vim.api.nvim_set_hl(0, '@org.hyperlink.url', { link = '@org.hyperlink' })
+    vim.api.nvim_set_hl(0, '@org.hyperlink.desc', { link = '@org.hyperlink' })
+
+    -- Force bold for org-mode specific highlight groups
+    vim.api.nvim_set_hl(0, '@org.bold', { bold = true })
+    vim.api.nvim_set_hl(0, '@markup.strong', { bold = true })
+
+    -- Get the current highlight attributes
+    require("orgmode-custom").VISIBILITY()
+  end,
 })
 
 ---------------------------------------------------------------------
