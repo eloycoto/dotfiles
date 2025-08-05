@@ -48,39 +48,6 @@ plugins = {
     'RRethy/vim-illuminate',
     "nvim-tree/nvim-web-devicons",
     { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
-    {
-      "yetone/avante.nvim",
-      event = "VeryLazy",
-      lazy = false,
-      build = "make",
-      dependencies = {
-        "stevearc/dressing.nvim",
-        "nvim-lua/plenary.nvim",
-        "MunifTanjim/nui.nvim",
-        {
-          -- support for image pasting
-          "HakonHarnes/img-clip.nvim",
-          event = "VeryLazy",
-          opts = {
-            default = {
-              embed_image_as_base64 = false,
-              prompt_for_file_name = false,
-              drag_and_drop = {
-                insert_mode = true,
-              },
-            },
-          },
-        },
-        {
-          -- Make sure to set this up properly if you have lazy=true
-          'MeanderingProgrammer/render-markdown.nvim',
-          opts = {
-            file_types = { "markdown", "Avante" },
-          },
-          ft = { "markdown", "Avante" },
-        },
-      },
-    }
 }
 require("lazy").setup(plugins)
 
@@ -130,18 +97,7 @@ vim.o.tabstop = 4
 -- vim.o.colorscheme=gruvbox
 vim.g.gruvbox_contrast_dark = "soft"
 vim.g.gruvbox_contrast_light = "soft"
-vim.g.gruvbox_bold = 1
 vim.cmd.colorscheme("gruvbox")
-
-vim.cmd([[
-  augroup GruvboxBoldFix
-    autocmd!
-    autocmd ColorScheme * highlight Statement gui=bold cterm=bold
-    autocmd ColorScheme * highlight Keyword gui=bold cterm=bold
-    autocmd ColorScheme * highlight Type gui=bold cterm=bold
-    autocmd ColorScheme * highlight Identifier gui=bold cterm=bold
-  augroup END
-]])
 
 vim.g.rustfmt_autosave = 1
 
@@ -214,11 +170,6 @@ require('lualine').setup {
     lualine_b = {'branch', 'diff', 'diagnostics'},
     lualine_c = {{'filename', path=1}},
     lualine_x = {
-      {
-        function()
-          return require("avante.config").provider
-        end,
-      },
       'encoding',
       'fileformat',
       'filetype'
@@ -404,11 +355,22 @@ require('gitsigns').setup()
 local wilder = require('wilder')
 wilder.setup({modes = {':', '/', '?'}})
 
+-- Add the autocmd to that group
+vim.api.nvim_create_autocmd("BufReadPost", {
+  pattern = "*.org",
+  callback = function()
+    -- PR: https://github.com/nvim-orgmode/orgmode/pull/965
+    vim.api.nvim_set_hl(0, '@org.hyperlink', { link = '@markup.link.url' })
+    vim.api.nvim_set_hl(0, '@org.hyperlink.url', { link = '@org.hyperlink' })
+    vim.api.nvim_set_hl(0, '@org.hyperlink.desc', { link = '@org.hyperlink' })
+    require("orgmode-custom").VISIBILITY()
+  end,
+})
 
 ---------------------------------------------------------------------
--- Orgmode
+-- Treesitter
 ---------------------------------------------------------------------
--- Orgmode configuration
+-- Tree-sitter configuration
 require('orgmode').setup({
     org_agenda_files = {'~/notes/*'},
     org_default_notes_file = '~/notes/refile.org',
@@ -418,24 +380,6 @@ require('orgmode').setup({
             org_do_promote="<leader>>",
         }
     }
-})
-
-
-vim.api.nvim_create_autocmd("BufReadPost", {
-  pattern = "*.org",
-  callback = function()
-    -- PR: https://github.com/nvim-orgmode/orgmode/pull/965
-    vim.api.nvim_set_hl(0, '@org.hyperlink', { link = '@markup.link.url' })
-    vim.api.nvim_set_hl(0, '@org.hyperlink.url', { link = '@org.hyperlink' })
-    vim.api.nvim_set_hl(0, '@org.hyperlink.desc', { link = '@org.hyperlink' })
-
-    -- Force bold for org-mode specific highlight groups
-    vim.api.nvim_set_hl(0, '@org.bold', { bold = true })
-    vim.api.nvim_set_hl(0, '@markup.strong', { bold = true })
-
-    -- Get the current highlight attributes
-    require("orgmode-custom").VISIBILITY()
-  end,
 })
 
 ---------------------------------------------------------------------
@@ -507,132 +451,3 @@ vim.api.nvim_create_user_command('DDebug', Debugger, {})
 --------------------
 ellm = require("llm").new()
 vim.api.nvim_command('command! -range LLM lua ellm:call_function()')
-
-
---------------------
--- Avante
---------------------
-avante_config = {
-    provider = "ollama",
-    ollama = {
-        model = "qwen2.5-coder:7b",
-        endpoint = os.getenv("OLLAMA_ENDPOINT"),
-    },
-    vendors = {
-        llama = {
-            provider = "ollama",
-            model = "llama3.1:8b",
-            endpoint = os.getenv("OLLAMA_ENDPOINT"),
-        },
-        ["claude-haiku"] = {
-            __inherited_from = "claude",
-            model = "claude-3-haiku-20241022",
-            timeout = 30000,
-            temperature = 0,
-            max_tokens = 8000,
-        },
-    },
-
-    dual_boost = {
-        enabled = false,
-        first_provider = "ollama",
-        second_provider = "llama",
-        prompt = "Based on the two reference outputs below, generate a response that incorporates elements from both but reflects your own judgment and unique perspective. Do not provide any explanation, just give the response directly. Reference Output 1: [{{provider1_output}}], Reference Output 2: [{{provider2_output}}]",
-        timeout = 60000, -- Timeout in milliseconds
-      },
-      behaviour = {
-        auto_suggestions = false, -- Experimental stage
-        auto_set_highlight_group = true,
-        auto_set_keymaps = true,
-        auto_apply_diff_after_generation = false,
-        support_paste_from_clipboard = true,
-        minimize_diff = true, -- Whether to remove unchanged lines when applying a code block
-      },
-      mappings = {
-        --- @class AvanteConflictMappings
-        diff = {
-          ours = "co",
-          theirs = "ct",
-          all_theirs = "ca",
-          both = "cb",
-          cursor = "cc",
-          next = "]x",
-          prev = "[x",
-        },
-        suggestion = {
-          accept = "<M-l>",
-          next = "<M-]>",
-          prev = "<M-[>",
-          dismiss = "<C-]>",
-        },
-        jump = {
-          next = "]]",
-          prev = "[[",
-        },
-        submit = {
-          normal = "<CR>",
-          insert = "<C-s>",
-        },
-        sidebar = {
-          apply_all = "A",
-          apply_cursor = "a",
-          switch_windows = "<Tab>",
-          reverse_switch_windows = "<S-Tab>",
-        },
-      },
-      hints = { enabled = true },
-      windows = {
-        ---@type "right" | "left" | "top" | "bottom"
-        position = "right", -- the position of the sidebar
-        wrap = true, -- similar to vim.o.wrap
-        width = 30, -- default % based on available width
-        sidebar_header = {
-          enabled = true, -- true, false to enable/disable the header
-          align = "center", -- left, center, right for title
-          rounded = true,
-        },
-        input = {
-          prefix = "> ",
-          height = 8, -- Height of the input window in vertical layout
-        },
-        edit = {
-          border = "rounded",
-          start_insert = true, -- Start insert mode when opening the edit window
-        },
-        ask = {
-          floating = false, -- Open the 'AvanteAsk' prompt in a floating window
-          start_insert = true, -- Start insert mode when opening the ask window
-          border = "rounded",
-          ---@type "ours" | "theirs"
-          focus_on_apply = "ours", -- which diff to focus after applying
-        },
-      },
-      highlights = {
-        ---@type AvanteConflictHighlights
-        diff = {
-          current = "DiffText",
-          incoming = "DiffAdd",
-        },
-      },
-      --- @class AvanteConflictUserConfig
-      diff = {
-        autojump = true,
-        ---@type string | fun(): any
-        list_opener = "copen",
-        --- Override the 'timeoutlen' setting while hovering over a diff (see :help timeoutlen).
-        --- Helps to avoid entering operator-pending mode with diff mappings starting with `c`.
-        --- Disable by setting to -1.
-        override_timeoutlen = 500,
-      }
-}
-
-vim.api.nvim_create_user_command('Llama', function()
-    require("avante.api").switch_provider("llama")
-end, {})
-
-vim.api.nvim_create_user_command('Claude', function()
-    require("avante.api").switch_provider("claude")
-end, {})
-
-require('avante_lib').load()
-require("avante").setup(avante_config)
