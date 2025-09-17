@@ -1,0 +1,26 @@
+{
+  "week": {
+    "prefix": "week",
+    "body": [
+    "** W",
+    "#+VISIBILITY: children",
+    "*Status:*",
+    "*Blocker:*",
+    "  -",
+    "*Pain:*",
+    "  -",
+    "*Achievements:*",
+    "  -",
+    "*Next week goals:*",
+    "  -"
+    ]
+  },
+  "code": {
+    "prefix": "code",
+    "body": [
+      "#+BEGIN_SRC ${1:Lang} ",
+      "",
+      "#+END_SR"
+    ]
+  }
+}

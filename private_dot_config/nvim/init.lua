@@ -1,4 +1,3 @@
-
 function map(mode, lhs, rhs, opts)
     local options = { noremap = true }
     if opts then
@@ -22,15 +21,9 @@ vim.opt.rtp:prepend(lazypath)
 
 plugins = {
     'folke/zen-mode.nvim',
-    'L3MON4D3/LuaSnip',
-    'ctrlpvim/ctrlp.vim',
     'gelguy/wilder.nvim',
-    'gruvbox-community/gruvbox',
-    'hrsh7th/cmp-buffer',
-    'hrsh7th/cmp-cmdline',
-    'hrsh7th/cmp-nvim-lsp',
-    'hrsh7th/cmp-path',
-    'hrsh7th/nvim-cmp',
+    -- 'gruvbox-community/gruvbox',
+    'ellisonleao/gruvbox.nvim',
     'lewis6991/gitsigns.nvim',
     'liuchengxu/vista.vim', --Tagbar
     'neovim/nvim-lspconfig',
@@ -46,7 +39,10 @@ plugins = {
     'sirtaj/vim-openscad',
     'tpope/vim-commentary',
     'RRethy/vim-illuminate',
+    'folke/trouble.nvim',
     "nvim-tree/nvim-web-devicons",
+    'rafamadriz/friendly-snippets',
+    {'saghen/blink.cmp', version = '1.*' },
     { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
 }
 require("lazy").setup(plugins)
@@ -94,9 +90,6 @@ vim.o.shiftwidth = 4
 vim.o.tabstop = 4
 
 
--- vim.o.colorscheme=gruvbox
-vim.g.gruvbox_contrast_dark = "soft"
-vim.g.gruvbox_contrast_light = "soft"
 vim.cmd.colorscheme("gruvbox")
 
 vim.g.rustfmt_autosave = 1
@@ -133,18 +126,6 @@ vim.cmd([[
     autocmd FileType org setlocal tabstop=2 shiftwidth=2
     autocmd FileType nix setlocal tabstop=2 shiftwidth=2
 ]])
-
-vim.api.nvim_create_autocmd("FileType", {
-    pattern = "markdown",
-    callback = function()
-        vim.opt.equalalways = true
-        vim.opt.winwidth = 100
-        vim.opt_local.columns = 80
-        vim.opt_local.textwidth = 80
-        vim.opt_local.wrap = true
-    end
-})
-
 
 require('lualine').setup {
   options = {
@@ -225,77 +206,6 @@ require('illuminate').configure({
 
 local lspkind = require('lspkind')
 
-local source_mapping = {
-	buffer = "[Buffer]",
-	nvim_lsp = "[LSP]",
-	nvim_lua = "[Lua]",
-	path = "[Path]",
-}
-
-local log = function(message)
-    local log_file_path = '/tmp/nvim.log'
-    local log_file = io.open(log_file_path, "a")
-    io.output(log_file)
-    io.write(message.."\n")
-    io.close(log_file)
-end
-
-local globaln = 0
-
-local cmp = require'cmp'
-cmp.setup({
-    snippet = {
-      -- REQUIRED - you must specify a snippet engine
-      expand = function(args)
-        require("luasnip").lsp_expand(args.body)
-      end,
-    },
-    mapping = cmp.mapping.preset.insert({
-        ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-        ['<C-f>'] = cmp.mapping.scroll_docs(4),
-        ['<C-Space>'] = cmp.mapping.complete(),
-        ['<C-e>'] = cmp.mapping.abort(),
-        ['<CR>'] = cmp.mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
-    }),
-    sources = cmp.config.sources({
-		-- { name = 'cmp_tabnine' },
-        { name = 'nvim_lsp' },
-        { name = 'orgmode' },
-        { name = 'luasnip' }, -- For luasnip users.
-    }, {
-        { name = 'buffer' },
-    }),
-    formatting = {
-		format = function(entry, vim_item)
-			-- if you have lspkind installed, you can use it like
-			-- in the following line:
-	 		vim_item.kind = lspkind.symbolic(vim_item.kind, {mode = "symbol"})
-	 		vim_item.menu = source_mapping[entry.source.name]
-	 		local maxwidth = 80
-	 		vim_item.abbr = string.sub(vim_item.abbr, 1, maxwidth)
-	 		return vim_item
-	  end,
-	},
-    experimental = {
-        -- ghost_text = true
-    }
-})
-
-
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-vim.g.ctrlp_map = '<c-p>'
-vim.g.ctrlp_working_path_mode = 'ra'
-vim.g.ctrlp_switch_buffer = 'et'
-vim.g.ctrlp_mruf_max=450
-vim.g.ctrlp_max_files=0
-vim.g.ctrlp_use_caching = 1
-vim.g.ctrlp_clear_cache_on_exit = 0
-vim.g.ctrlp_match_window = 'bottom,order:btt,max:10,results:10'
-vim.g.ctrlp_buftag_types = {
-	go= "--language-force=go --golang-types=ftv"
-}
-
 local nvim_lsp = require('lspconfig')
 
 local on_attach = function(client, bufnr)
@@ -320,35 +230,82 @@ local on_attach = function(client, bufnr)
   vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
 end
 
--- Use a loop to conveniently call 'setup' on multiple servers and
--- map buffer local keybindings when the language server attaches
--- require'lspconfig'.rust_analyzer.setup{}
-local servers = { "gopls", "rust_analyzer" }
+local servers = { "gopls", "rust_analyzer", "harper_ls" }
 for _, lsp in ipairs(servers) do
-    nvim_lsp[lsp].setup {
-        on_attach = on_attach,
-        capabilities = capabilities
-    }
+  if lsp == "harper_ls" then
+      nvim_lsp[lsp].setup {
+          on_attach = on_attach,
+          capabilities = capabilities,
+          filetypes = { "markdown", "text", "org", "mail" },
+          settings = {
+              ["harper-ls"] = {
+                  linters = {
+                    spell_check = true,
+                    spelled_numbers = false,
+                    an_a = true,
+                    sentence_capitalization = true,
+                    unclosed_quotes = true,
+                    wrong_quotes = true,
+                    long_sentences = true,
+                    repeated_words = true,
+                    matcher = true,
+                    spaces = false,
+                  }
+              }
+          }
+      }
+  else
+      nvim_lsp[lsp].setup {
+          on_attach = on_attach,
+          capabilities = capabilities
+      }
+  end
 end
 
-vim.api.nvim_create_autocmd({"BufWritePre"}, {
-    pattern = {"*.go", "*.rs"},
-    callback = function()
-        -- vim.lsp.buf.code_action()
-        -- vim.lsp.buf.format({async = true})
-    end,
+
+vim.diagnostic.config({
+  float = {
+    focusable = false,
+    close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+    border = 'rounded',
+    source = 'always',
+    prefix = ' ',
+    scope = 'cursor',
+  },
 })
 
-if vim.fn.executable('ltext') > 0 then
-    nvim_lsp["ltext"].setup {
-        on_attach = on_attach,
-        capabilities = capabilities,
-        cmd = { "ltex-ls" },
-        filetypes = { "markdown", "text" },
-        flags = { debounce_text_changes = 300 }
+-- Auto-show diagnostic float after 500ms
+vim.api.nvim_create_autocmd({ "CursorHold" }, {
+  pattern = "*",
+  callback = function()
+    local opts = {
+      focusable = false,
+      close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
+      border = 'rounded',
+      source = 'always',
+      prefix = ' ',
+      scope = 'cursor',
     }
-end
+    vim.diagnostic.open_float(nil, opts)
+  end
+})
 
+
+require('blink.cmp').setup({
+    keymap = { preset = 'super-tab' },
+
+    appearance = {
+        nerd_font_variant = 'mono'
+    },
+
+    completion = { documentation = { auto_show = false } },
+
+    sources = {
+        default = { 'lsp', 'path', 'snippets', 'buffer' },
+    },
+
+    fuzzy = { implementation = "prefer_rust_with_warning" }
+})
 
 require('gitsigns').setup()
 
@@ -359,6 +316,12 @@ wilder.setup({modes = {':', '/', '?'}})
 vim.api.nvim_create_autocmd("BufReadPost", {
   pattern = "*.org",
   callback = function()
+    -- This is better for harper.
+    vim.bo.expandtab = false
+    vim.bo.tabstop = 2
+    vim.bo.shiftwidth = 2
+    vim.bo.softtabstop = 2
+
     -- PR: https://github.com/nvim-orgmode/orgmode/pull/965
     vim.api.nvim_set_hl(0, '@org.hyperlink', { link = '@markup.link.url' })
     vim.api.nvim_set_hl(0, '@org.hyperlink.url', { link = '@org.hyperlink' })
@@ -451,3 +414,12 @@ vim.api.nvim_create_user_command('DDebug', Debugger, {})
 --------------------
 ellm = require("llm").new()
 vim.api.nvim_command('command! -range LLM lua ellm:call_function()')
+
+
+require("trouble").setup({
+  position = "bottom",
+  height = 10,
+  auto_open = false,
+})
+map('n', '<leader>x', '<cmd>Trouble diagnostics toggle<cr>')
+
