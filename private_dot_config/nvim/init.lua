@@ -42,6 +42,7 @@ plugins = {
     'folke/trouble.nvim',
     "nvim-tree/nvim-web-devicons",
     'rafamadriz/friendly-snippets',
+    'ahkohd/difft.nvim',
     {'saghen/blink.cmp', version = '1.*' },
     { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
 }
@@ -55,8 +56,7 @@ vim.opt.cmdheight = 3
 vim.opt.colorcolumn = "80"
 vim.opt.completeopt="menuone,noinsert,noselect"
 vim.opt.concealcursor = 'nc'
-vim.opt.conceallevel = 2
-vim.opt.conceallevel = 3
+vim.opt.conceallevel =2
 vim.opt.cursorline = true
 vim.opt.foldlevel = 3
 vim.opt.linebreak = true
@@ -74,7 +74,6 @@ vim.opt.splitright  = true
 vim.opt.synmaxcol = 240
 vim.opt.syntax = "on"
 vim.opt.termguicolors =  true
-vim.opt.termguicolors = true
 vim.opt.timeoutlen = 300
 vim.opt.undolevels = 100
 vim.opt.updatetime = 250
@@ -102,6 +101,7 @@ map('n', '<C-k>', ':tabprevious<CR>')
 map('n', '<leader><leader>', ':tabnext<CR>')
 
 map('n', 'f', ':Telescope grep_string<CR>')
+map('n', '<C-p>', ':Telescope git_files<CR>')
 
 map('n', '<UP>', '<Nop>')
 map('n', '<DOWN>', '<Nop>')
@@ -115,7 +115,6 @@ map('v', '<', '<gv')
 map('v', '>', '>gv')
 map('v', 'J', ":m '>+1<CR>gv=gv")
 map('v', 'K', ":m '>-2<CR>gv=gv")
-map('n', 'gx', ":m '>-2<CR>gv=gv")
 
 map("n", "gx", ":silent !xdg-open <cfile><CR>")
 
@@ -206,62 +205,61 @@ require('illuminate').configure({
 
 local lspkind = require('lspkind')
 
-local nvim_lsp = require('lspconfig')
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(args)
+    local bufnr = args.buf
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
 
-local on_attach = function(client, bufnr)
-  -- Enable completion triggered by <c-x><c-o>
-  vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
+    -- Enable completion triggered by <c-x><c-o>
+    vim.api.nvim_buf_set_option(bufnr, "omnifunc", "v:lua.vim.lsp.omnifunc")
 
-  -- LSP Buffer Mappings.
-  local bufopts = { noremap = true, silent = true, buffer = bufnr }
-  vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
-  vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, bufopts)
-  vim.keymap.set("n", "<leader>d",vim.diagnostic.open_float, bufopts)
-  vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
-  vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
-  vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
-  vim.keymap.set("n", "<space>wl", function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-  end, bufopts)
-  vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, bufopts)
-  vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, bufopts)
-  vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
-  vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
-  vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
-end
+    -- LSP Buffer Mappings
+    local bufopts = { noremap = true, silent = true, buffer = bufnr }
+    vim.keymap.set("n", "gD", vim.lsp.buf.declaration, bufopts)
+    vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, bufopts)
+    vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, bufopts)
+    vim.keymap.set("n", "K", vim.lsp.buf.hover, bufopts)
+    vim.keymap.set("n", "gi", vim.lsp.buf.implementation, bufopts)
+    vim.keymap.set("n", "<C-k>", vim.lsp.buf.signature_help, bufopts)
+    vim.keymap.set("n", "<space>wl", function()
+      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    end, bufopts)
+    vim.keymap.set("n", "<space>D", vim.lsp.buf.type_definition, bufopts)
+    vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, bufopts)
+    vim.keymap.set("n", "<space>ca", vim.lsp.buf.code_action, bufopts)
+    vim.keymap.set("n", "gr", vim.lsp.buf.references, bufopts)
+    vim.keymap.set('n', '<space>f', function() vim.lsp.buf.format { async = true } end, bufopts)
+  end,
+})
 
-local servers = { "gopls", "rust_analyzer", "harper_ls" }
-for _, lsp in ipairs(servers) do
-  if lsp == "harper_ls" then
-      nvim_lsp[lsp].setup {
-          on_attach = on_attach,
-          capabilities = capabilities,
-          filetypes = { "markdown", "text", "org", "mail" },
-          settings = {
-              ["harper-ls"] = {
-                  linters = {
-                    spell_check = true,
-                    spelled_numbers = false,
-                    an_a = true,
-                    sentence_capitalization = true,
-                    unclosed_quotes = true,
-                    wrong_quotes = true,
-                    long_sentences = true,
-                    repeated_words = true,
-                    matcher = true,
-                    spaces = false,
-                  }
-              }
-          }
+vim.lsp.config('harper_ls', {
+  filetypes = { "markdown", "text", "org", "mail" },
+  settings = {
+    ["harper-ls"] = {
+      linters = {
+        spell_check = true,
+        spelled_numbers = false,
+        an_a = true,
+        sentence_capitalization = true,
+        unclosed_quotes = true,
+        wrong_quotes = true,
+        long_sentences = true,
+        repeated_words = true,
+        matcher = true,
+        spaces = false,
       }
-  else
-      nvim_lsp[lsp].setup {
-          on_attach = on_attach,
-          capabilities = capabilities
-      }
-  end
-end
+    }
+  }
+})
 
+vim.lsp.config('ruff', {
+  cmd = { 'uv', 'run', 'ruff', 'server' },
+})
+
+vim.lsp.enable('gopls')
+vim.lsp.enable('rust_analyzer')
+vim.lsp.enable('harper_ls')
+vim.lsp.enable('ruff')
 
 vim.diagnostic.config({
   float = {
@@ -342,7 +340,8 @@ require('orgmode').setup({
             org_do_demote="<leader><",
             org_do_promote="<leader>>",
         }
-    }
+    },
+    org_update_news_after_save = true,
 })
 
 ---------------------------------------------------------------------
@@ -423,3 +422,11 @@ require("trouble").setup({
 })
 map('n', '<leader>x', '<cmd>Trouble diagnostics toggle<cr>')
 
+
+
+
+
+--------------------
+-- Difft functions
+--------------------
+require("difft").setup()

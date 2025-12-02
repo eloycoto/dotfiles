@@ -6,13 +6,13 @@
     "#+VISIBILITY: children",
     "*Status:*",
     "*Blocker:*",
-    "  -",
+    "\t-",
     "*Pain:*",
-    "  -",
+    "\t-",
     "*Achievements:*",
-    "  -",
+    "\t-",
     "*Next week goals:*",
-    "  -"
+    "\t-"
     ]
   },
   "code": {
@@ -20,7 +20,7 @@
     "body": [
       "#+BEGIN_SRC ${1:Lang} ",
       "",
-      "#+END_SR"
+      "#+END_SRC"
     ]
   }
 }
