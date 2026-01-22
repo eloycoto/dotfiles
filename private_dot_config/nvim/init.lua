@@ -19,32 +19,46 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+
 plugins = {
-    'folke/zen-mode.nvim',
-    'gelguy/wilder.nvim',
-    -- 'gruvbox-community/gruvbox',
+    -- UI/Appearance (load immediately for consistent look)
     'ellisonleao/gruvbox.nvim',
-    'lewis6991/gitsigns.nvim',
-    'liuchengxu/vista.vim', --Tagbar
-    'neovim/nvim-lspconfig',
+    'nvim-lualine/lualine.nvim',
+
+    -- Core dependencies (loaded by others as needed)
     'nvim-lua/plenary.nvim',
     'nvim-lua/popup.nvim',
-    'nvim-lualine/lualine.nvim',
-    'nvim-orgmode/orgmode',
-    'nvim-telescope/telescope.nvim',
-    'nvim-treesitter/nvim-treesitter',
-    'onsails/lspkind.nvim',
-    'rust-lang/rust.vim',
-    'ryanoasis/vim-devicons',
-    'sirtaj/vim-openscad',
-    'tpope/vim-commentary',
-    'RRethy/vim-illuminate',
-    'folke/trouble.nvim',
     "nvim-tree/nvim-web-devicons",
-    'rafamadriz/friendly-snippets',
-    'ahkohd/difft.nvim',
-    {'saghen/blink.cmp', version = '1.*' },
-    { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {} },
+
+    -- Lazy-load on file open
+    { 'lewis6991/gitsigns.nvim', event = "BufReadPre" },
+    { 'RRethy/vim-illuminate', event = "BufReadPost" },
+    { "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {}, event = "BufReadPost" },
+    { 'nvim-treesitter/nvim-treesitter', event = "BufReadPost" },
+
+    -- Lazy-load on insert (completion)
+    { 'saghen/blink.cmp', version = '1.*', event = "InsertEnter" },
+    { 'rafamadriz/friendly-snippets', event = "InsertEnter" },
+    { 'onsails/lspkind.nvim', event = "InsertEnter" },
+
+    -- LSP (load when opening a buffer)
+    { 'neovim/nvim-lspconfig' },
+
+    -- Lazy-load on command
+    { 'nvim-telescope/telescope.nvim', cmd = "Telescope" },
+    { 'folke/zen-mode.nvim', cmd = "ZenMode" },
+    { 'folke/trouble.nvim' },
+    { 'liuchengxu/vista.vim', cmd = "Vista" },
+    { 'ahkohd/difft.nvim', cmd = "Difft" },
+
+    -- Filetype-specific
+    { 'rust-lang/rust.vim', ft = "rust" },
+    { 'sirtaj/vim-openscad', ft = "openscad" },
+    { 'nvim-orgmode/orgmode', ft = "org" },
+
+    -- Lightweight / keep as-is
+    'tpope/vim-commentary',
+    'gelguy/wilder.nvim',
 }
 require("lazy").setup(plugins)
 
@@ -252,6 +266,8 @@ vim.lsp.config('harper_ls', {
   }
 })
 
+
+
 vim.lsp.config('ruff', {
   cmd = { 'uv', 'run', 'ruff', 'server' },
 })
@@ -262,15 +278,14 @@ vim.lsp.enable('harper_ls')
 vim.lsp.enable('ruff')
 
 vim.diagnostic.config({
-  float = {
-    focusable = false,
-    close_events = { "BufLeave", "CursorMoved", "InsertEnter", "FocusLost" },
-    border = 'rounded',
-    source = 'always',
-    prefix = ' ',
-    scope = 'cursor',
-  },
+    underline = true,
+    virtual_text = true,
+    signs = true,
+    update_in_insert = false,
+    severity_sort = true,
 })
+-- For harper, that use hint quite a lot.
+vim.api.nvim_set_hl(0, 'DiagnosticUnderlineHint', { underline = true, sp = '#8ec07c' })
 
 -- Auto-show diagnostic float after 500ms
 vim.api.nvim_create_autocmd({ "CursorHold" }, {
@@ -430,3 +445,10 @@ map('n', '<leader>x', '<cmd>Trouble diagnostics toggle<cr>')
 -- Difft functions
 --------------------
 require("difft").setup()
+
+vim.api.nvim_create_user_command('GitReviewMode', function()
+  local gs = require('gitsigns')
+  gs.change_base('origin/main', true)
+  gs.toggle_linehl(true)  -- turn on line highlighting
+  print("Review mode: highlighting vs origin/main")
+end, {})
