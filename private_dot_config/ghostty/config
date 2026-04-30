@@ -1,0 +1,15 @@
+# font-family = JetBrains Mono
+# freetype-load-flags = hinting,force-autohint,monochrome,autohint
+font-family = JetBrains Mono
+font-family-bold = JetBrains Mono
+font-family-italic = JetBrains Mono
+font-style = Regular
+font-style-bold = Bold
+font-style-italic = Italic
+font-size = 12
+theme = Gruvbox Light
+window-decoration = false
+keybind = ctrl+v=paste_from_clipboard
+term = xterm-256color
+keybind = shift+enter=text:\x1b\r
+command = ~/.nix-profile/bin/zsh
