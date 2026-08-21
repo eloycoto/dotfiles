@@ -1,0 +1,5 @@
+skip-shell-integration-prompt = true
+worktree-path = "{{ repo_path }}/../wt-{{ repo }}.{{ branch | sanitize }}"
+
+[post-start]
+copy-ignored = "wt step copy-ignored"
