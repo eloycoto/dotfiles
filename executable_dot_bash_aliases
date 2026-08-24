@@ -119,3 +119,60 @@ qv() {
   # Use llm with the fetched content as a system prompt
   llm prompt "$question" -s "$system"
 }
+
+
+get_review_list() {
+  local pr="$1"
+
+  # Validate that a PR number was provided
+  if [[ -z "$pr" ]]; then
+    echo "Error: Please provide a PR number."
+    echo "Usage: get_review_list <pr_number>"
+    return 1
+  fi
+
+  # The jq script groups the data by file (path), then by line number, 
+  # and formats it into clean Markdown.
+  local jq_format='
+    .data.repository.pullRequest.reviewThreads.nodes
+    | map(select(.isResolved == false))
+    | group_by(.path)
+    | map(
+        "# \((.[0].path))\n\n" +
+        (
+          group_by(.line)
+          | map(
+              "## Line \((.[0].line // "general"))\n" +
+              (
+                map(.comments.nodes[] | "**\(.author.login)**: \(.body)")
+                | join("\n\n")
+              )
+            )
+          | join("\n\n")
+        )
+      )
+    | join("\n\n---\n\n")
+  '
+
+  # Fetch the data and pipe it through our jq formatter
+  gh api graphql -F owner=":owner" -F repo=":repo" -F pr="$pr" -f query='
+  query($owner: String!, $repo: String!, $pr: Int!) {
+    repository(owner: $owner, name: $repo) {
+      pullRequest(number: $pr) {
+        reviewThreads(first: 100) {
+          nodes {
+            isResolved
+            path
+            line
+            comments(first: 100) {
+              nodes {
+                author { login }
+                body
+              }
+            }
+          }
+        }
+      }
+    }
+  }' --jq "$jq_format"
+}
